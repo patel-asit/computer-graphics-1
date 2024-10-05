@@ -1,6 +1,10 @@
 class Triangle {
   static final int NUM_VERTICES = 3;
 
+  //consider adding these instance variables. also might need updating in updateAll() method
+  // edge vectors, center point, normal vector at center, projected vertices, projected edge vectors...
+
+
   // positions of three triangle vertices in 3D space
   PVector[] vertices = new PVector[NUM_VERTICES];
   
@@ -12,6 +16,13 @@ class Triangle {
     for (int j=0; j<NUM_VERTICES; j++) {
       this.vertices[j] = vertices[j].copy();
       
+      //get cross product vector and that is normal vector
+      //this.vertexNormals = 3DcrossProduct(getEdges(vertices));
+
+      //CAREFUL ABOUT CREATING AND RETURNING PVECTOR OBJECTS
+      // WE MIGHT HAVE TO DEEP COPY SOMETIMES
+      // OR ELSE YOU WILL BE RETURNING POINTERS ONLY
+
       //to get normals, make 2 vectors from vertices and cross product them, and that n value is used to get [n,n,n] vertexNormals
       //this.vertexNormals[j] = normals[j].copy();
       //this.vertexNormals[j].normalize();
@@ -32,8 +43,14 @@ class Triangle {
   // if triangle vertices or vertex normals change, update remaining data
   void updateAll() {
     
-    //update what data tho????? i dont get it????
+    // if we add more instance variables in this class,
+    // then this method is used to update their values like how setVectros() is used to update the class's variables
     
+    /*
+        If you add more instance variables to the
+        Triangle class—and you should definitely do so—put the code that calculates their values into updateAll()
+        so that all of your variables are updated as the triangle rotates.
+    */
   }
 
   void setVectors(PVector[] newVertices, PVector[] newNormals) {
