@@ -48,7 +48,7 @@ void bresenhamLine(int fromX, int fromY, int toX, int toY) {
   error = slope;
   
   //draw initial pixel
-  setPixel(fastFrom, slowFrom);
+  //setPixel(fastFrom, slowFrom);
 
   for(int i=fastFrom; i != fastTo; i += fastStep){
     if(error >= 0.5){
