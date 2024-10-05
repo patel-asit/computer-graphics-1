@@ -1,0 +1,55 @@
+BOTTOM LEFT
+fromX: -125 fromY: -125 toX: -250 toY: -125
+fromX: -125 fromY: -125 toX: -125 toY: -250
+fromX: -125 fromY: -125 toX: 0 toY: -125
+fromX: -125 fromY: -125 toX: -125 toY: 0
+fromX: -125 fromY: -125 toX: -177 toY: -250
+fromX: -125 fromY: -125 toX: -250 toY: -177
+fromX: -125 fromY: -125 toX: -177 toY: 0
+fromX: -125 fromY: -125 toX: -250 toY: -73
+fromX: -125 fromY: -125 toX: -73 toY: -250
+fromX: -125 fromY: -125 toX: 0 toY: -177
+fromX: -125 fromY: -125 toX: -73 toY: 0
+fromX: -125 fromY: -125 toX: 0 toY: -73
+
+TOP LEFT
+fromX: -125 fromY: 125 toX: -250 toY: 125
+fromX: -125 fromY: 125 toX: -125 toY: 0
+fromX: -125 fromY: 125 toX: 0 toY: 125
+fromX: -125 fromY: 125 toX: -125 toY: 250
+fromX: -125 fromY: 125 toX: -177 toY: 0
+fromX: -125 fromY: 125 toX: -250 toY: 73
+fromX: -125 fromY: 125 toX: -177 toY: 250
+fromX: -125 fromY: 125 toX: -250 toY: 177
+fromX: -125 fromY: 125 toX: -73 toY: 0
+fromX: -125 fromY: 125 toX: 0 toY: 73
+fromX: -125 fromY: 125 toX: -73 toY: 250
+fromX: -125 fromY: 125 toX: 0 toY: 177
+
+BOTTOM RIGHT
+fromX: 125 fromY: -125 toX: 0 toY: -125
+fromX: 125 fromY: -125 toX: 125 toY: -250
+fromX: 125 fromY: -125 toX: 250 toY: -125
+fromX: 125 fromY: -125 toX: 125 toY: 0
+fromX: 125 fromY: -125 toX: 73 toY: -250
+fromX: 125 fromY: -125 toX: 0 toY: -177
+fromX: 125 fromY: -125 toX: 73 toY: 0
+fromX: 125 fromY: -125 toX: 0 toY: -73
+fromX: 125 fromY: -125 toX: 177 toY: -250
+fromX: 125 fromY: -125 toX: 250 toY: -177
+fromX: 125 fromY: -125 toX: 177 toY: 0
+fromX: 125 fromY: -125 toX: 250 toY: -73
+
+TOP RIGHT
+fromX: 125 fromY: 125 toX: 0 toY: 125 //straight left
+fromX: 125 fromY: 125 toX: 125 toY: 0 //straight down
+fromX: 125 fromY: 125 toX: 250 toY: 125 // straight right
+fromX: 125 fromY: 125 toX: 125 toY: 250 // straight up
+fromX: 125 fromY: 125 toX: 73 toY: 0 // number 12
+fromX: 125 fromY: 125 toX: 0 toY: 73
+fromX: 125 fromY: 125 toX: 73 toY: 250
+fromX: 125 fromY: 125 toX: 0 toY: 177
+fromX: 125 fromY: 125 toX: 177 toY: 0
+fromX: 125 fromY: 125 toX: 250 toY: 73 // number 9
+fromX: 125 fromY: 125 toX: 177 toY: 250 // number 6
+fromX: 125 fromY: 125 toX: 250 toY: 177 // number 7
