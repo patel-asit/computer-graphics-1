@@ -7,14 +7,14 @@ void bresenhamLine(int fromX, int fromY, int toX, int toY) {
   
   float deltaX = toX - fromX;
   float deltaY = toY - fromY; 
-  float deltaFast = deltaX; //<>//
-  float deltaSlow = deltaY; //<>//
+  float deltaFast = deltaX;
+  float deltaSlow = deltaY;
   
-  boolean fastX = true; //<>//
+  boolean fastX = true;
   
   int fastFrom = fromX;
   int fastTo = toX; 
-  int slowFrom = fromY; //<>//
+  int slowFrom = fromY;
   int slowTo = toY;
   
   int j=0;
