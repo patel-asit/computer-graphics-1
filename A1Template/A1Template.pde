@@ -24,7 +24,7 @@ void setup() {
 
   buffer = createGraphics(600, 600);
 
-  singleTriangle = new Triangle[]{}; // change this line
+  singleTriangle = new Triangle[]{}; // change this line <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   rotatedSingleTriangle = copyTriangleList(singleTriangle);
 
   surfaceTessellation = new Triangle[]{}; // change this line

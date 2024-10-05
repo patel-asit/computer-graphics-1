@@ -7,6 +7,18 @@ class Triangle {
   // normal vectors at vertices
   PVector[] vertexNormals = new PVector[NUM_VERTICES];
 
+  //constructor with only 1 param
+  Triangle(PVector[] vertices) {
+    for (int j=0; j<NUM_VERTICES; j++) {
+      this.vertices[j] = vertices[j].copy();
+      
+      //to get normals, make 2 vectors from vertices and cross product them, and that n value is used to get [n,n,n] vertexNormals
+      //this.vertexNormals[j] = normals[j].copy();
+      //this.vertexNormals[j].normalize();
+    }
+    updateAll();
+  }
+
   Triangle(PVector[] vertices, PVector[] normals) {
     for (int j=0; j<NUM_VERTICES; j++) {
       this.vertices[j] = vertices[j].copy();
@@ -15,9 +27,13 @@ class Triangle {
     }
     updateAll();
   }
-
+  
+  
   // if triangle vertices or vertex normals change, update remaining data
   void updateAll() {
+    
+    //update what data tho????? i dont get it????
+    
   }
 
   void setVectors(PVector[] newVertices, PVector[] newNormals) {

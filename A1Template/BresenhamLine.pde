@@ -6,17 +6,20 @@ void bresenhamLine(int fromX, int fromY, int toX, int toY) {
   //System.out.println("fromX: " + fromX + " fromY: " + fromY + " toX: " + toX + " toY: " + toY);
   
   float deltaX = toX - fromX;
-  float deltaY = toY - fromY; 
+  float deltaY = toY - fromY;
+  
+  // considering x as the fast direction by default
+  boolean fastX = true;
+  
   float deltaFast = deltaX;
   float deltaSlow = deltaY;
-  
-  boolean fastX = true;
   
   int fastFrom = fromX;
   int fastTo = toX; 
   int slowFrom = fromY;
   int slowTo = toY;
   
+  // counter and offsets helpful for drawing pixels when rise or run are + OR -
   int j=0;
   int fastStep = 1;
   int slowStep = 1; 
@@ -37,7 +40,7 @@ void bresenhamLine(int fromX, int fromY, int toX, int toY) {
     fastX = false;
   }
   
-  // SWITCHES WHETHER rise OR run HAVE TO BE + OR -
+  // SWITCHES rise OR run TO BE + OR - DIRECTION 
   if(deltaFast < 0) fastStep = -1;
   if(deltaSlow < 0) slowStep = -1;
 
