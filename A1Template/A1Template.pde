@@ -114,19 +114,9 @@ void draw2DTriangle(Triangle t) {
     // System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
   }
 
-  // now i need to get the edges of the triangle
-  // we assume that the input vertices are in CCW order
-  // need a method for edge vector 
-  // returns: 3 edge vectors in CCW order, using 3 vertices
-  //PVector[] edges = getEdges(twoDVertices);
-
-  //DO A BACK FACE CULLING TEST, AND DONT DRAW IF IT FAILS
-  // ALSO PERFORM A DEGENERATE TEST
-  // MAYBE CHECK FOR NULL VALUES OF projectVertex() AND DONT DRAW IF IT FAILS
-
-  
+  //     PENDING TODO!!!
   // DOUBLE CHECK WHEN DOES projectVertex() returns NULL VALUES
-  // ACCOUNT FOR THOSE
+  // ACCOUNT FOR THOSE IN doCulling() METHOD
 
 
   if(doCulling(twoDVertices))  return;
@@ -201,7 +191,7 @@ boolean doCulling(PVector[] vertices){
   //degenerate test: if the cross product of edges is zero
   if (normal.mag() == 0) return true;
 
-  //backfacing test: if the dot product of the normal and the eye vector is negative
+  //backface test: if the dot product of the normal and the eye vector is negative
   if (normal.dot(EYE) < 0) return true;
 
   return false;
