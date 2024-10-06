@@ -26,13 +26,13 @@ void setup() {
 
   singleTriangle = new Triangle[]{
     new Triangle(new PVector[]{
-      new PVector(150, -150, 20),
-      new PVector(0, 150, 20),
-      new PVector(-150, -150, 20)
+      new PVector(200, -200, 20),
+      new PVector(0, 200, 20),
+      new PVector(-200, -200, 20)
     }, new PVector[]{
-        new PVector(0, 0, 0),
-        new PVector(0, 0, 0),
-        new PVector(0, 0, 0)
+        new PVector(0, 0, 1),
+        new PVector(0, 0, 1),
+        new PVector(0, 0, 1)
   })}; // change this line <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   rotatedSingleTriangle = copyTriangleList(singleTriangle); // <<<<<<< would i have to change this copylist since i added more instance variables to the Triangle class??
 
@@ -90,8 +90,7 @@ void draw() {
  */
 void drawTriangles(Triangle[] triangles) {
   for (Triangle t : triangles) {
-    draw2DTriangle(t);
-  }
+    draw2DTriangle(t);  }
 }
 
 /*
@@ -103,6 +102,8 @@ Use the projected vertices to draw the 2D triangle on the raster.
  - fill the interior using fillTriangle()
  */
 void draw2DTriangle(Triangle t) {
+  setColor(OUTLINE_COLOR);
+  
   // holds 2D projected vertices
   PVector twoDVertices[] = new PVector[3];
 
@@ -110,7 +111,7 @@ void draw2DTriangle(Triangle t) {
   for (int i = 0; i < 3; i++) {
     twoDVertices[i] = projectVertex(t.vertices[i]);
     //print vertices with with saying vertex number i and its x and y values
-    System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
+    // System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
   }
 
   // now i need to get the edges of the triangle
@@ -133,9 +134,11 @@ void draw2DTriangle(Triangle t) {
   // draw breseham lines for the edges of the triangle
   for (int i = 0; i < 3; i++) {
     // print out the line coordinates with Edge number i and its x and y values
-    System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
+    // System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
     bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % 3].x), int(twoDVertices[(i + 1) % 3].y));
   }
+
+  if(doNormals) drawNormals(t);
 }
 
 /*
@@ -145,16 +148,23 @@ final int NORMAL_LENGTH = 20;
 final float[] FACE_NORMAL_COLOR = {0f, 1f, 1f}; // cyan
 final float[] VERTEX_NORMAL_COLOR = {1f, 0.6f, 0.1f}; // orange
 void drawNormals(Triangle t) {
+  
   // draw the normal vectors at the vertices
+  PVector v, n;
+
+  setColor(VERTEX_NORMAL_COLOR);
   for (int i = 0; i < 3; i++) {
-    PVector v = projectVertex(t.vertices[i]);
-    PVector n = projectVertex(t.vertexNormals[i]);
+    v = projectVertex(t.vertices[i]);
+    n = projectVertex(t.vertexNormals[i]);
     bresenhamLine(int(v.x), int(v.y), int(v.x + n.x * NORMAL_LENGTH), int(v.y + n.y * NORMAL_LENGTH));
+    //print out the vertex normal coordinates with vertex number i and its x and y values
+    //System.out.println("Vertex Normal " + i + " x: " + int(v.x) + " y: " + int(v.y) + " x2: " + int(v.x + n.x * NORMAL_LENGTH) + " y2: " + int(v.y + n.y * NORMAL_LENGTH));
   }
 
   // draw the normal vector at the center of the triangle
   PVector center = projectVertex(t.getCenter());
   PVector normal = projectVertex(t.getNormal());
+  setColor(FACE_NORMAL_COLOR);
   bresenhamLine(int(center.x), int(center.y), int(center.x + normal.x * NORMAL_LENGTH), int(center.y + normal.y * NORMAL_LENGTH));
 }
 
