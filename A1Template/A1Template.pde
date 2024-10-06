@@ -265,7 +265,7 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   PVector[][] vertices = new PVector[rings][lines];
   PVector[][] normals = new PVector[rings][lines];
   // Triangle[] tessellation = new Triangle[(rings-1)*lines*2];
-  Triangle[] tessellation = new Triangle[(rings-1)*lines*2 + lines];
+  Triangle[] tessellation = new Triangle[(rings-1)*lines*2];
 
   // # of hsteps = # of vertical lines from top point to bottom point
   float hSteps = TWO_PI / nTheta;
@@ -340,19 +340,19 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   // draw poles for the sphere
   //when creating triangles, i need the triangles array to have 2*lines more, because that is extra triangles touching poles.
   // get coordinates for north pole and south pole and get normals
-  PVector northPole = new PVector(0, radius, 0);
-  PVector northNormal = new PVector(0, 0, 1);
-  PVector southNormal = new PVector(0, 0, -1);
+  // PVector northPole = new PVector(0, radius, 0);
+  // PVector northNormal = new PVector(0, 0, 1);
+  // PVector southNormal = new PVector(0, 0, -1);
 
-  for(int i=0; i<lines; i++){
-    ver1 = northPole;
-    ver2 = vertices[1][(i+1)%lines];
-    ver3 = vertices[1][i];
-    nor1 = northNormal;
-    nor2 = normals[1][(i+1)%lines];
-    nor3 = normals[1][i];
-    tessellation[counter++] = new Triangle(new PVector[]{ver1, ver2, ver3}, new PVector[]{nor1, nor2, nor3});
-  }
+  // for(int i=0; i<lines; i++){
+  //   ver1 = northPole;
+  //   ver2 = vertices[1][(i+1)%lines];
+  //   ver3 = vertices[1][i];
+  //   nor1 = northNormal;
+  //   nor2 = normals[1][(i+1)%lines];
+  //   nor3 = normals[1][i];
+  //   tessellation[counter++] = new Triangle(new PVector[]{ver1, ver2, ver3}, new PVector[]{nor1, nor2, nor3});
+  // }
   return tessellation;
 
 }
