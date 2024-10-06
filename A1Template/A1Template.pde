@@ -33,11 +33,17 @@ void setup() {
         new PVector(0, 0, 1),
         new PVector(0, 0, 1),
         new PVector(0, 0, 1)
-  })}; // change this line <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  rotatedSingleTriangle = copyTriangleList(singleTriangle); // <<<<<<< would i have to change this copylist since i added more instance variables to the Triangle class??
+  })};
+  rotatedSingleTriangle = copyTriangleList(singleTriangle); 
 
-  // surfaceTessellation = new Triangle[]{}; // change this line
-  surfaceTessellation = createTessellation(20,30,300);
+  /*
+    Create the tessellation of the surface of a sphere.
+    Parameters: 
+      number of horizontal rings (has to be at least 2)
+      number of vertical lines (has to be at least 3)
+      radius of the sphere
+  */
+  surfaceTessellation = createTessellation(1,30,300);
   rotatedSurfaceTessellation = copyTriangleList(surfaceTessellation);
 
   printSettings();
@@ -103,44 +109,39 @@ Use the projected vertices to draw the 2D triangle on the raster.
  - fill the interior using fillTriangle()
  */
 void draw2DTriangle(Triangle t) {
-  try {
-    setColor(OUTLINE_COLOR);
-    //we dont draw anything if doOutline is false
-    if (!doOutline) return;
+  setColor(OUTLINE_COLOR);
+  //we dont draw anything if doOutline is false
+  if (!doOutline) return;
 
-    // holds 2D projected vertices
-    PVector twoDVertices[] = new PVector[3];
+  // holds 2D projected vertices
+  PVector twoDVertices[] = new PVector[3];
 
-    // now i have projected triangle points for 2D raster
-    for (int i = 0; i < 3; i++) {
-      try {
-        twoDVertices[i] = projectVertex(t.vertices[i]);
-      } catch (NullPointerException e) {
-        System.err.println("NullPointerException caught while projecting vertex " + i + ": " + e.getMessage());
-        e.printStackTrace();
-        return;
-      }
-      //print vertices with with saying vertex number i and its x and y values
-      // System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
+  // now i have projected triangle points for 2D raster
+  for (int i = 0; i < 3; i++) {
+    try {
+      twoDVertices[i] = projectVertex(t.vertices[i]);
+    } catch (NullPointerException e) {
+      System.err.println("NullPointerException caught while projecting vertex " + i + ": " + e.getMessage());
+      e.printStackTrace();
+      return;
     }
-
-    //     PENDING TODO!!!
-    // DOUBLE CHECK WHEN DOES projectVertex() returns NULL VALUES
-    // ACCOUNT FOR THOSE IN doCulling() METHOD
-    if(doCulling(twoDVertices)) return;
-
-    // draw breseham lines for the edges of the triangle
-    for (int i = 0; i < 3; i++) {
-      // print out the line coordinates with Edge number i and its x and y values
-      // System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
-      bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % 3].x), int(twoDVertices[(i + 1) % 3].y));
-    }
-
-    if(doNormals) drawNormals(t);
-  } catch (NullPointerException e) {
-    System.err.println("NullPointerException caught: " + e.getMessage());
-    e.printStackTrace();
+    //print vertices with with saying vertex number i and its x and y values
+    // System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
   }
+
+  //     PENDING TODO!!!
+  // DOUBLE CHECK WHEN DOES projectVertex() returns NULL VALUES
+  // ACCOUNT FOR THOSE IN doCulling() METHOD
+  if(doCulling(twoDVertices)) return;
+
+  // draw breseham lines for the edges of the triangle
+  for (int i = 0; i < 3; i++) {
+    // print out the line coordinates with Edge number i and its x and y values
+    // System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
+    bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % 3].x), int(twoDVertices[(i + 1) % 3].y));
+  }
+
+  if(doNormals) drawNormals(t);
 }
 
 /*
@@ -229,7 +230,12 @@ PVector[] getEdges(PVector[] vertices) {
 
 // CREATE TESSELATION MATRIX
 Triangle[] createTessellation(int nPhi, int nTheta, int radius){
-  if(nPhi < 2 || nTheta < 3) return null;
+  //Returns empty Tesselation if nPhi is less than 2 or nTheta is less than 3
+  if(nPhi < 2 || nTheta < 3){
+    System.out.println("ERROR: No Tessellation can be drawn. nPhi has to be >=2 and nTheta has to be >=3");
+    return new Triangle[]{};
+  } 
+
   
   //renaming the variables for easier understanding
   int rings = nPhi; // horizontal rings parallel to the equator
