@@ -235,10 +235,10 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   int rings = nPhi; // horizontal rings parallel to the equator
   int lines = nTheta; //vertical lines from top point to bottom point
 
-  PVector[][] vertices = new PVector[rings][lines];
-  PVector[][] normals = new PVector[rings][lines];
-  // Triangle[] tessellation = new Triangle[(rings-1)*lines*2];
-  Triangle[] tessellation = new Triangle[(rings-1)*lines*2];
+  PVector[][] vertices = new PVector[rings+1][lines+1];
+  PVector[][] normals = new PVector[rings+1][lines+1];
+  int tessellationSize = (rings-1)*(lines)*2 + lines*2;
+  Triangle[] tessellation = new Triangle[tessellationSize];
 
   // # of hsteps = # of vertical lines from top point to bottom point
   float hSteps = TWO_PI / nTheta;
@@ -246,19 +246,15 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   float vSteps = PI / nPhi;
 
   // get the x, y, z coordinates for the sphere
-  for(int r=1; r<=rings; r++){
-    for(int l=1; l<=lines; l++){
-
+  for(int r=0; r<=rings; r++){
+    for(int l=0; l<=lines; l++){
       // get the x, y, z coordinates for the sphere but do float calculations
       float x = (float)radius * sin(vSteps * (float)r) * cos(hSteps * (float)l);
       float y = (float)radius * cos(vSteps * (float)r);
       float z = (float)radius * sin(vSteps * (float)r) * sin(hSteps * (float)l);
 
-      vertices[r-1][l-1] = new PVector(x, y, z);
-      normals[r-1][l-1] = new PVector(x, y, z).normalize();
-
-      //print vertices and normal vectors
-      System.out.println("Vertex " + r + " " + l + " x: " + x + " y: " + y + " z: " + z);
+      vertices[r][l] = new PVector(x, y, z);
+      normals[r][l] = new PVector(x, y, z).normalize();
     }
   }
 
@@ -266,60 +262,25 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
 
   int counter = 0;
   PVector ver1, ver2, ver3, nor1, nor2, nor3;
-  for(int i=0; i<rings-1; i++){
+  for(int i=0; i<rings; i++){
     for(int j=0; j<lines; j++){
-      //print iteration values i j and counter value for the current iteration
-      // System.out.println("i: " + i + " j: " + j + " counter: " + counter);
-
       ver1 = vertices[i][j];
       ver2 = vertices[i+1][j];
       ver3 = vertices[i][(j+1)%lines];
       nor1 = normals[i][j];
       nor2 = normals[i+1][j];
       nor3 = normals[i][(j+1)%lines];
-      
-      if (counter >= (rings-1)*lines*2){
-        System.out.println("Counter exceeds lines * rings: " + counter);
-      } else {
-        tessellation[counter] = new Triangle(new PVector[]{ver1.copy(), ver2.copy(), ver3.copy()}, new PVector[]{nor1.copy(), nor2.copy(), nor3.copy()});
-        counter++;
-      }
+      tessellation[counter++] = new Triangle(new PVector[]{ver1.copy(), ver2.copy(), ver3.copy()}, new PVector[]{nor1.copy(), nor2.copy(), nor3.copy()});      
 
       ver1 = vertices[i][j];
-      ver2 = vertices[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent a day figuring this out!!!!
+      ver2 = vertices[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent 15 hours figuring this out!!!!
       ver3 = vertices[i+1][j];
       nor1 = normals[i][j];
-      nor2 = normals[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent a day figuring this out!!!!
+      nor2 = normals[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent 15 hours figuring this out!!!!
       nor3 = normals[i+1][j];
-      
-      // System.out.println("im here2");
-
-      if (counter >= (rings-1)*lines*2){ 
-        println("Counter exceeds lines * rings: " + counter);
-      } else {
-        tessellation[counter] = new Triangle(new PVector[]{ver1.copy(), ver2.copy(), ver3.copy()}, new PVector[]{nor1.copy(), nor2.copy(), nor3.copy()});
-        // System.out.println("im here3");
-        counter++;
-      }
+      tessellation[counter++] = new Triangle(new PVector[]{ver1.copy(), ver2.copy(), ver3.copy()}, new PVector[]{nor1.copy(), nor2.copy(), nor3.copy()});
     }
   }
-  
-  // draw poles for the sphere
-  //when creating triangles, i need the triangles array to have 2*lines more, because that is extra triangles touching poles.
-  // get coordinates for north pole and south pole and get normals
-  // PVector northPole = new PVector(0, radius, 0);
-  // PVector northNormal = new PVector(0, 0, 1);
-  // PVector southNormal = new PVector(0, 0, -1);
 
-  // for(int i=0; i<lines; i++){
-  //   ver1 = northPole;
-  //   ver2 = vertices[1][(i+1)%lines];
-  //   ver3 = vertices[1][i];
-  //   nor1 = northNormal;
-  //   nor2 = normals[1][(i+1)%lines];
-  //   nor3 = normals[1][i];
-  //   tessellation[counter++] = new Triangle(new PVector[]{ver1, ver2, ver3}, new PVector[]{nor1, nor2, nor3});
-  // }
   return tessellation;
-
 }
