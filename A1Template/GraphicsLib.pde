@@ -97,3 +97,5 @@ PVector projectVertex(PVector v) {
   PVector p = new PVector(v.x/(adjZ*PERSPECTIVE), v.y/(adjZ*PERSPECTIVE), 0);
   return p;
 }
+
+// helper functions for 2D triangle drawing

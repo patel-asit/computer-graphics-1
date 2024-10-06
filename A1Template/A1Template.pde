@@ -127,18 +127,10 @@ void draw2DTriangle(Triangle t) {
   // DOUBLE CHECK WHEN DOES projectVertex() returns NULL VALUES
   // ACCOUNT FOR THOSE
 
-  // DO SOMETHING ABOUT degenerate triangles AND back-facing culling
 
-  if(doCulling(twoDVertices)){
-    return;
-  }
+  if(doCulling(twoDVertices))  return;
 
-  // if(degenerateTriangle(twoDVertices[0], twoDVertices[1], twoDVertices[2])){
-  //   return;
-  // }
-
-  // maybe i shouldnt need edge vectors, i just make line using points.
-  // use those edges to draw bresenhams line and give the 2D vertices as int values
+  // draw breseham lines for the edges of the triangle
   for (int i = 0; i < 3; i++) {
     // print out the line coordinates with Edge number i and its x and y values
     System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
@@ -146,16 +138,24 @@ void draw2DTriangle(Triangle t) {
   }
 }
 
-
-
 /*
  Draw the normal vectors at each vertex and triangle center
  */
 final int NORMAL_LENGTH = 20;
 final float[] FACE_NORMAL_COLOR = {0f, 1f, 1f}; // cyan
 final float[] VERTEX_NORMAL_COLOR = {1f, 0.6f, 0.1f}; // orange
-
 void drawNormals(Triangle t) {
+  // draw the normal vectors at the vertices
+  for (int i = 0; i < 3; i++) {
+    PVector v = projectVertex(t.vertices[i]);
+    PVector n = projectVertex(t.vertexNormals[i]);
+    bresenhamLine(int(v.x), int(v.y), int(v.x + n.x * NORMAL_LENGTH), int(v.y + n.y * NORMAL_LENGTH));
+  }
+
+  // draw the normal vector at the center of the triangle
+  PVector center = projectVertex(t.getCenter());
+  PVector normal = projectVertex(t.getNormal());
+  bresenhamLine(int(center.x), int(center.y), int(center.x + normal.x * NORMAL_LENGTH), int(center.y + normal.y * NORMAL_LENGTH));
 }
 
 /*
@@ -177,7 +177,10 @@ float[] phong(PVector p, PVector n, PVector eye, PVector light,
 }
 
 
-//helper functions for 2D triangle drawing
+/*
+  helper functions for 2D triangle drawing
+*/
+
 boolean doCulling(PVector[] vertices){
   // get the edge vectors
   PVector[] edges = getEdges(vertices);
@@ -185,11 +188,12 @@ boolean doCulling(PVector[] vertices){
   // get the normal vector
   PVector normal = edges[0].copy().cross(edges[1]).normalize();
 
-  // if the dot product of the normal and the eye vector is negative, the triangle is back-facing
-  if (normal.dot(EYE) < 0) {
-    return true;
-  }
-  
+  //degenerate test: if the cross product of edges is zero
+  if (normal.mag() == 0) return true;
+
+  //backfacing test: if the dot product of the normal and the eye vector is negative
+  if (normal.dot(EYE) < 0) return true;
+
   return false;
 }
 

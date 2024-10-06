@@ -118,3 +118,22 @@ Triangle[] copyTriangleList(Triangle[] originalList) {
   }
   return copyList;
 }
+
+
+//helpful getters
+
+PVector getCenter(){
+  PVector center = new PVector(0, 0, 0);
+  for (int i = 0; i < 3; i++) {
+    center.add(this.vertices[i]);
+  }
+  center.div(3);
+  return center;
+}
+
+PVector getNormal() {
+  PVector edge1 = PVector.sub(this.vertices[1], this.vertices[0]);
+  PVector edge2 = PVector.sub(this.vertices[2], this.vertices[1]);
+  PVector normal = edge1.cross(edge2).normalize();
+  return normal;
+}
