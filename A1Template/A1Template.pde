@@ -103,19 +103,12 @@ Use the projected vertices to draw the 2D triangle on the raster.
  - fill the interior using fillTriangle()
  */
 void draw2DTriangle(Triangle t) {
-  //triangle has 3 vertices and 3 normals
-
-  //i think we focus only on vertices here, so loop through each vertex and project it
-
   // holds 2D projected vertices
-  // Each of this PVector vertex is 2D projected from 3D
   PVector twoDVertices[] = new PVector[3];
 
   // now i have projected triangle points for 2D raster
   for (int i = 0; i < 3; i++) {
     twoDVertices[i] = projectVertex(t.vertices[i]);
-    //System.out.println(twoDVertices[i]);
-    
     //print vertices with with saying vertex number i and its x and y values
     System.out.println("Vertex " + i + " x: " + twoDVertices[i].x + " y: " + twoDVertices[i].y);
   }
@@ -126,29 +119,34 @@ void draw2DTriangle(Triangle t) {
   // returns: 3 edge vectors in CCW order, using 3 vertices
   //PVector[] edges = getEdges(twoDVertices);
 
-  // maybe i shouldnt need edge vectors, i just make line using points.
-  // use those edges to draw bresenhams line and give the 2D vertices as int values
-  for (int i = 0; i < 3; i++) {
-    // print out the line coordinates with Edge number i and its x and y values
-    System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
-  
-    bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % 3].x), int(twoDVertices[(i + 1) % 3].y));
-  }
+  //DO A BACK FACE CULLING TEST, AND DONT DRAW IF IT FAILS
+  // ALSO PERFORM A DEGENERATE TEST
+  // MAYBE CHECK FOR NULL VALUES OF projectVertex() AND DONT DRAW IF IT FAILS
+
   
   // DOUBLE CHECK WHEN DOES projectVertex() returns NULL VALUES
   // ACCOUNT FOR THOSE
 
   // DO SOMETHING ABOUT degenerate triangles AND back-facing culling
+
+  if(doCulling(twoDVertices)){
+    return;
+  }
+
+  // if(degenerateTriangle(twoDVertices[0], twoDVertices[1], twoDVertices[2])){
+  //   return;
+  // }
+
+  // maybe i shouldnt need edge vectors, i just make line using points.
+  // use those edges to draw bresenhams line and give the 2D vertices as int values
+  for (int i = 0; i < 3; i++) {
+    // print out the line coordinates with Edge number i and its x and y values
+    System.out.println("Edge " + i + " x: " + int(twoDVertices[i].x) + " y: " + int(twoDVertices[i].y) + " x2: " + int(twoDVertices[(i + 1) % 3].x) + " y2: " + int(twoDVertices[(i + 1) % 3].y));
+    bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % 3].x), int(twoDVertices[(i + 1) % 3].y));
+  }
 }
 
-//helper functions for 2D triangle drawing
-PVector[] getEdges(PVector[] vertices) {
-  PVector[] edges = new PVector[3];
-  for (int i = 0; i < 3; i++) {
-    edges[i] = vertices[(i + 1) % 3].copy().sub(vertices[i]);
-  }
-  return edges;
-}
+
 
 /*
  Draw the normal vectors at each vertex and triangle center
@@ -177,3 +175,55 @@ float[] phong(PVector p, PVector n, PVector eye, PVector light,
   float[] material, float[][] fillColor, float shininess) {
   return null;
 }
+
+
+//helper functions for 2D triangle drawing
+boolean doCulling(PVector[] vertices){
+  // get the edge vectors
+  PVector[] edges = getEdges(vertices);
+
+  // get the normal vector
+  PVector normal = edges[0].copy().cross(edges[1]).normalize();
+
+  // if the dot product of the normal and the eye vector is negative, the triangle is back-facing
+  if (normal.dot(EYE) < 0) {
+    return true;
+  }
+  
+  return false;
+}
+
+PVector[] getEdges(PVector[] vertices) {
+  PVector[] edges = new PVector[3];
+  for (int i = 0; i < 3; i++) {
+    edges[i] = vertices[(i + 1) % 3].copy().sub(vertices[i]);
+  }
+  return edges;
+}
+
+
+// //helper functions for 2D triangle drawing
+// boolean doCulling(PVector[] vertices){
+//   // get the edge vectors
+//   PVector[] edges = getEdges(vertices);
+
+//   // get the normal vector
+//   PVector normal = edges[0].copy().cross(edges[1]).normalize();
+
+//   // get the center of the triangle
+//   PVector center = new PVector(0, 0, 0);
+//   for (PVector v : vertices) {
+//     center.add(v);
+//   }
+//   center.div(3);
+
+//   // get the vector from the center to the eye
+//   PVector eye = new PVector(EYE.x, EYE.y, EYE.z);
+//   eye.sub(center);
+
+//   // if the dot product of the normal and the eye vector is negative, the triangle is back-facing
+//   if (normal.dot(eye) < 0) {
+//     return true;
+//   }
+//   return false;
+// }
