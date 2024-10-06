@@ -11,25 +11,6 @@ class Triangle {
   // normal vectors at vertices
   PVector[] vertexNormals = new PVector[NUM_VERTICES];
 
-  //constructor with only 1 param
-  Triangle(PVector[] vertices) {
-    for (int j=0; j<NUM_VERTICES; j++) {
-      this.vertices[j] = vertices[j].copy();
-      
-      //get cross product vector and that is normal vector
-      //this.vertexNormals = 3DcrossProduct(getEdges(vertices));
-
-      //CAREFUL ABOUT CREATING AND RETURNING PVECTOR OBJECTS
-      // WE MIGHT HAVE TO DEEP COPY SOMETIMES
-      // OR ELSE YOU WILL BE RETURNING POINTERS ONLY
-
-      //to get normals, make 2 vectors from vertices and cross product them, and that n value is used to get [n,n,n] vertexNormals
-      //this.vertexNormals[j] = normals[j].copy();
-      //this.vertexNormals[j].normalize();
-    }
-    updateAll();
-  }
-
   Triangle(PVector[] vertices, PVector[] normals) {
     for (int j=0; j<NUM_VERTICES; j++) {
       this.vertices[j] = vertices[j].copy();
