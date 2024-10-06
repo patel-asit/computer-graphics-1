@@ -227,33 +227,6 @@ PVector[] getEdges(PVector[] vertices) {
   return edges;
 }
 
-
-// //helper functions for 2D triangle drawing
-// boolean doCulling(PVector[] vertices){
-//   // get the edge vectors
-//   PVector[] edges = getEdges(vertices);
-
-//   // get the normal vector
-//   PVector normal = edges[0].copy().cross(edges[1]).normalize();
-
-//   // get the center of the triangle
-//   PVector center = new PVector(0, 0, 0);
-//   for (PVector v : vertices) {
-//     center.add(v);
-//   }
-//   center.div(3);
-
-//   // get the vector from the center to the eye
-//   PVector eye = new PVector(EYE.x, EYE.y, EYE.z);
-//   eye.sub(center);
-
-//   // if the dot product of the normal and the eye vector is negative, the triangle is back-facing
-//   if (normal.dot(eye) < 0) {
-//     return true;
-//   }
-//   return false;
-// }
-
 // CREATE TESSELATION MATRIX
 Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   if(nPhi < 2 || nTheta < 3) return null;
@@ -281,7 +254,6 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
       float y = (float)radius * cos(vSteps * (float)r);
       float z = (float)radius * sin(vSteps * (float)r) * sin(hSteps * (float)l);
 
-      
       vertices[r-1][l-1] = new PVector(x, y, z);
       normals[r-1][l-1] = new PVector(x, y, z).normalize();
 
@@ -319,11 +291,6 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
       nor1 = normals[i][j];
       nor2 = normals[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent a day figuring this out!!!!
       nor3 = normals[i+1][j];
-
-      //check if any of vertices or normals are null (if so then print error message)
-      if(ver1 == null || ver2 == null || ver3 == null || nor1 == null || nor2 == null || nor3 == null){
-        System.err.println("Error: Vertex or Normal is null for i: " + i + " j: " + j);
-      }
       
       // System.out.println("im here2");
 
