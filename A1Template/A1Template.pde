@@ -177,42 +177,33 @@ void fillTriangle(Triangle t) {
   // run the loop and call scan line fill function. Project the vertices maybe
   // if shading mode is not NONE, calculate the shading for each pixel
   if(shadingMode != ShadingMode.NONE){
-    scanLineFill(t);
-  }
-}
+    //get projected vertices
+    PVector v1 = projectVertex(t.vertices[0]);
+    PVector v2 = projectVertex(t.vertices[1]);
+    PVector v3 = projectVertex(t.vertices[2]);
 
-
-void scanLineFill(Triangle t){
-    //if shading mode is not NONE, calculate the shading for each pixel
-  //set the pixel color
-
-  //get projected vertices
-  PVector v1 = projectVertex(t.vertices[0]);
-  PVector v2 = projectVertex(t.vertices[1]);
-  PVector v3 = projectVertex(t.vertices[2]);
-
-  //get the bounding box of the triangle
-  float minX = min(v1.x, v2.x, v3.x);
-  float maxX = max(v1.x, v2.x, v3.x);
-  float minY = min(v1.y, v2.y, v3.y);
-  float maxY = max(v1.y, v2.y, v3.y);
-  
-  //loop from y min to y max
-  for(int y = int(minY); y <= int(maxY); y++){
-    //this loop represents the scan line. We check individual pixels on the scan line
-    for(int x = int(minX); x <= int(maxX); x++){
-      if(isInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){
-        //if the pixel is in the triangle, set the pixel color
-        setPixel(x, y);
+    //get the bounding box of the triangle
+    float minX = min(v1.x, v2.x, v3.x);
+    float maxX = max(v1.x, v2.x, v3.x);
+    float minY = min(v1.y, v2.y, v3.y);
+    float maxY = max(v1.y, v2.y, v3.y);
+    
+    //loop from y min to y max
+    for(int y = int(minY); y <= int(maxY); y++){
+      //this loop represents the scan line. We check individual pixels on the scan line
+      for(int x = int(minX); x <= int(maxX); x++){
+        if(pointInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){
+          //if the pixel is in the triangle, set the pixel color
+          setPixel(x, y);
+        }
       }
     }
   }
-
 }
 
 // helper function to perform the Point In Triangle test
 // but it also sets the color according to baricentric coordinates (we sacrifice single responsibility for calculation efficiency)
-boolean isInTriangle(PVector[] triangleVertices, PVector point){
+boolean pointInTriangle(PVector[] triangleVertices, PVector point){
   boolean result = false;
 
   //used for Barycentric shading
@@ -227,16 +218,15 @@ boolean isInTriangle(PVector[] triangleVertices, PVector point){
   PVector[] edges = getTriangleEdges(triangleVertices);
 
   // do cross products between edge vector and point vector
-  PVector e0p0 = edges[0].cross(p0);
-  PVector e1p1 = edges[1].cross(p1);
-  PVector e2p2 = edges[2].cross(p2);
+  float e0p0 = edges[0].cross(p0).z;
+  float e1p1 = edges[1].cross(p1).z;
+  float e2p2 = edges[2].cross(p2).z;
 
 
   //Performing point in triangle test
   //if all the results have same sign or 0, the point is inside the triangle
-  if(e0p0.z >= 0 && e1p1.z >= 0 && e2p2.z >= 0){
-    result = true;
-  } else if(e0p0.z <= 0 && e1p1.z <= 0 && e2p2.z <= 0){
+  if( (e0p0 >= 0 && e1p1 >= 0 && e2p2 >= 0) ||
+      (e0p0 <= 0 && e1p1 <= 0 && e2p2 <= 0)){
     result = true;
   }
   
@@ -244,9 +234,9 @@ boolean isInTriangle(PVector[] triangleVertices, PVector point){
     setColor(FLAT_FILL_COLOR);
   } else if(shadingMode == ShadingMode.BARYCENTRIC){
     // perform the barycentric coordinate calculations
-    A0 = 0.5 * e1p1.z;
-    A1 = 0.5 * e2p2.z;
-    A2 = 0.5 * e0p0.z;
+    A0 = 0.5 * e1p1;
+    A1 = 0.5 * e2p2;
+    A2 = 0.5 * e0p0;
     // Calculate the total area
     A = A0 + A1 + A2;
     // Calculate barycentric coordinates
@@ -254,6 +244,8 @@ boolean isInTriangle(PVector[] triangleVertices, PVector point){
     v = A1 / A;
     w = A2 / A;
     setColor(u, v, w);
+  } else if(shadingMode == ShadingMode.PHONG){
+    //call the phong method
   }
   return result;
 }
@@ -305,7 +297,9 @@ PVector[] getTriangleEdges(PVector[] vertices) {
   return edges;
 }
 
-// CREATE TESSELATION MATRIX
+/*
+  CREATE TESSELATION MATRIX
+*/
 Triangle[] createTessellation(int nPhi, int nTheta, int radius){
   //Returns empty Tesselation if nPhi is less than 2 or nTheta is less than 3
   if(nPhi < MIN_N_PHI || nTheta < MIN_N_THETA){
@@ -341,8 +335,7 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
     }
   }
 
-  // create triangles for the sphere
-
+  //create triangles for the sphere
   int counter = 0;
   PVector ver1, ver2, ver3, nor1, nor2, nor3;
   for(int i=0; i<rings; i++){
