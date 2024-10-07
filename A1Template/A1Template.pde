@@ -99,7 +99,8 @@ void draw() {
  */
 void drawTriangles(Triangle[] triangles) {
   for (Triangle t : triangles) {
-    draw2DTriangle(t);  }
+    draw2DTriangle(t);  
+  }
 }
 
 /*
@@ -112,8 +113,6 @@ Use the projected vertices to draw the 2D triangle on the raster.
  */
 void draw2DTriangle(Triangle t) {
   setColor(OUTLINE_COLOR);
-  // dont draw anything if doOutline is false
-  if (!doOutline) return;
 
   // holds 2D projected vertices
   PVector twoDVertices[] = new PVector[NUM_DIMENSIONS];
@@ -124,11 +123,15 @@ void draw2DTriangle(Triangle t) {
   if(doCulling(twoDVertices)) return;
 
   // draw breseham lines for the edges of the triangle
-  for (int i = 0; i < NUM_DIMENSIONS; i++) {
-    bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % NUM_DIMENSIONS].x), int(twoDVertices[(i + 1) % NUM_DIMENSIONS].y));
+  if (doOutline){
+    for (int i = 0; i < NUM_DIMENSIONS; i++) {
+      bresenhamLine(int(twoDVertices[i].x), int(twoDVertices[i].y), int(twoDVertices[(i + 1) % NUM_DIMENSIONS].x), int(twoDVertices[(i + 1) % NUM_DIMENSIONS].y));
+    }
   }
 
   if(doNormals) drawNormals(t);
+
+  if(shadingMode != ShadingMode.NONE) fillTriangle(t);
 }
 
 /*
@@ -170,6 +173,67 @@ Fill the 2D triangle on the raster, using a scanline algorithm.
  Modify the raster using setColor() and setPixel() ONLY.
  */
 void fillTriangle(Triangle t) {
+  //check mode and change the color accordingly
+  // run the loop and call scan line fill function. Project the vertices maybe
+  // if shading mode is not NONE, calculate the shading for each pixel
+  if(shadingMode != ShadingMode.NONE){
+    scanLineFill(t);
+  }
+}
+
+
+void scanLineFill(Triangle t){
+
+  //if shading mode is not NONE, calculate the shading for each pixel
+  //set the pixel color
+
+  //get projected vertices
+  PVector v1 = projectVertex(t.vertices[0]);
+  PVector v2 = projectVertex(t.vertices[1]);
+  PVector v3 = projectVertex(t.vertices[2]);
+
+  //get the bounding box of the triangle
+  float minX = min(v1.x, v2.x, v3.x);
+  float maxX = max(v1.x, v2.x, v3.x);
+  float minY = min(v1.y, v2.y, v3.y);
+  float maxY = max(v1.y, v2.y, v3.y);
+  
+  //loop from y min to y max
+  for(int y = int(minY); y <= int(maxY); y++){
+    //this loop represents the scan line. We check individual pixels on the scan line
+    for(int x = int(minX); x <= int(maxX); x++){
+      if(isInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){
+        //if the pixel is in the triangle, set the pixel color
+        setColor(FLAT_FILL_COLOR);
+        setPixel(x, y);
+      }
+    }
+  }
+}
+
+boolean isInTriangle(PVector[] triangleVertices, PVector point){
+  boolean result = false;
+  //subtract point from tx then ty and tz
+  PVector px = triangleVertices[0].copy().sub(point);
+  PVector py = triangleVertices[1].copy().sub(point);
+  PVector pz = triangleVertices[2].copy().sub(point);
+
+  //get triangle's edges. Gives e1, e2, e3 in order
+  PVector[] edges = getTriangleEdges(triangleVertices);
+
+  //perform the test
+  PVector result1 = edges[0].cross(px);
+  PVector result2 = edges[1].cross(py);
+  PVector result3 = edges[2].cross(pz);
+
+  //if all the results have same sign or 0, the point is inside the triangle
+  if(result1.z >= 0 && result2.z >= 0 && result3.z >= 0){
+    result = true;
+  } else if(result1.z <= 0 && result2.z <= 0 && result3.z <= 0){
+    result = true;
+  }
+  
+  return result;
 }
 
 /*
@@ -194,8 +258,8 @@ boolean doCulling(PVector[] vertices){
     if (vertex == null) return true;
   }
 
-  // get the edge vectors
-  PVector[] edges = getEdges(vertices);
+  // get the edge vectors. 
+  PVector[] edges = getTriangleEdges(vertices);
 
   // get the normal vector
   PVector normal = edges[0].copy().cross(edges[1]).normalize();
@@ -209,7 +273,8 @@ boolean doCulling(PVector[] vertices){
   return false;
 }
 
-PVector[] getEdges(PVector[] vertices) {
+// get the edges of the triangle using the 2D projected vertices
+PVector[] getTriangleEdges(PVector[] vertices) {
   int numVertices = vertices.length;
   PVector[] edges = new PVector[numVertices];
   for (int i = 0; i < numVertices; i++) {
