@@ -1,5 +1,6 @@
 /*
-COMP 3490 Assignment 1 Template
+  COMP 3490 Assignment 1 
+  Author: ASIT PATEL (7866182)
  */
 
 final color BLACK = color(0);
@@ -188,11 +189,11 @@ void fillTriangle(Triangle t) {
     float minY = min(v1.y, v2.y, v3.y);
     float maxY = max(v1.y, v2.y, v3.y);
     
-    //loop from y min to y max
+    //loop from y min to y max (bounding box)
     for(int y = int(minY); y <= int(maxY); y++){
-      //this loop represents the scan line. We check individual pixels on the scan line
+      //this loop represents the scan line. Iterations check individual pixels on the scan line
       for(int x = int(minX); x <= int(maxX); x++){
-        if(pointInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){
+        if(pointInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){ //point in triangle function sets the colors
           //if the pixel is in the triangle, set the pixel color
           setPixel(x, y);
         }
@@ -230,6 +231,7 @@ boolean pointInTriangle(PVector[] triangleVertices, PVector point){
     result = true;
   }
   
+  //set the color of the pixel based on the shading mode
   if(shadingMode == ShadingMode.FLAT){
     setColor(FLAT_FILL_COLOR);
   } else if(shadingMode == ShadingMode.BARYCENTRIC){
@@ -244,8 +246,12 @@ boolean pointInTriangle(PVector[] triangleVertices, PVector point){
     v = A1 / A;
     w = A2 / A;
     setColor(u, v, w);
-  } else if(shadingMode == ShadingMode.PHONG){
-    //call the phong method
+  } else if(
+    shadingMode == ShadingMode.PHONG_FACE || 
+    shadingMode == ShadingMode.PHONG_VERTEX || 
+    shadingMode == ShadingMode.PHONG_GOURAUD ||
+    shadingMode == ShadingMode.PHONG_SHADING){
+    //call the phong method. This is a placeholder for now
   }
   return result;
 }
@@ -306,7 +312,6 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
     System.out.println("ERROR: No Tessellation can be drawn. nPhi has to be >=2 and nTheta has to be >=3");
     return new Triangle[]{};
   } 
-
   
   //renaming the variables for easier understanding
   int rings = nPhi; // horizontal rings parallel to the equator
@@ -314,12 +319,12 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
 
   PVector[][] vertices = new PVector[rings+1][lines+1];
   PVector[][] normals = new PVector[rings+1][lines+1];
-  int tessellationSize = (rings-1)*(lines)*2 + lines*2;
+
+  int tessellationSize = rings*lines*2; //one box on the sphere surface creates 2 triangles
   Triangle[] tessellation = new Triangle[tessellationSize];
 
-  // # of hsteps = # of vertical lines from top point to bottom point
+  // steps help us iterate over angles over the range of 0:2PI or 0:PI
   float hSteps = TWO_PI / nTheta;
-  // # of vsteps = # of rings
   float vSteps = PI / nPhi;
 
   // get the x, y, z coordinates for the sphere
@@ -337,20 +342,22 @@ Triangle[] createTessellation(int nPhi, int nTheta, int radius){
 
   //create triangles for the sphere
   int counter = 0;
-  PVector ver1, ver2, ver3, nor1, nor2, nor3;
+  PVector ver1, ver2, ver3, nor1, nor2, nor3; //temp vars for vertices and normals
+
+  //imagine you have a parallelgram on the sphere. We can make two triangles from that parallelgram.
   for(int i=0; i<rings; i++){
     for(int j=0; j<lines; j++){
-      ver1 = vertices[i][j];
-      ver2 = vertices[i+1][j];
-      ver3 = vertices[i][(j+1)%lines];
+      ver1 = vertices[i][j]; //This is top left point of the parallelgram
+      ver2 = vertices[i+1][j]; //this is bottom right point of the parallelgram
+      ver3 = vertices[i][(j+1)%lines]; //this is top right point of the parallelgram
       nor1 = normals[i][j];
       nor2 = normals[i+1][j];
       nor3 = normals[i][(j+1)%lines];
       tessellation[counter++] = new Triangle(new PVector[]{ver1.copy(), ver2.copy(), ver3.copy()}, new PVector[]{nor1.copy(), nor2.copy(), nor3.copy()});      
 
-      ver1 = vertices[i][j];
-      ver2 = vertices[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent 15 hours figuring this out!!!!
-      ver3 = vertices[i+1][j];
+      ver1 = vertices[i][j]; //This is top left point of the parallelgram
+      ver2 = vertices[i+1][((j-1)+lines)%lines]; //This is bottom left point of the parallelgram
+      ver3 = vertices[i+1][j]; //this is bottom right point of the parallelgram
       nor1 = normals[i][j];
       nor2 = normals[i+1][((j-1)+lines)%lines]; //java is so f dumb omfg!!! -1 mod 30 returns -1 for some reason! Spent 15 hours figuring this out!!!!
       nor3 = normals[i+1][j];

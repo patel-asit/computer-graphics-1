@@ -23,15 +23,7 @@ class Triangle {
   
   // if triangle vertices or vertex normals change, update remaining data
   void updateAll() {
-    
-    // if we add more instance variables in this class,
-    // then this method is used to update their values like how setVectros() is used to update the class's variables
-    
-    /*
-        If you add more instance variables to the
-        Triangle class—and you should definitely do so—put the code that calculates their values into updateAll()
-        so that all of your variables are updated as the triangle rotates.
-    */
+
   }
 
   void setVectors(PVector[] newVertices, PVector[] newNormals) {
