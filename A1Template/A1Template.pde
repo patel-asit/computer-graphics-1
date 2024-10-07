@@ -183,8 +183,7 @@ void fillTriangle(Triangle t) {
 
 
 void scanLineFill(Triangle t){
-
-  //if shading mode is not NONE, calculate the shading for each pixel
+    //if shading mode is not NONE, calculate the shading for each pixel
   //set the pixel color
 
   //get projected vertices
@@ -204,35 +203,58 @@ void scanLineFill(Triangle t){
     for(int x = int(minX); x <= int(maxX); x++){
       if(isInTriangle(new PVector[]{v1, v2, v3}, new PVector(x, y))){
         //if the pixel is in the triangle, set the pixel color
-        setColor(FLAT_FILL_COLOR);
         setPixel(x, y);
       }
     }
   }
+
 }
 
+// helper function to perform the Point In Triangle test
+// but it also sets the color according to baricentric coordinates (we sacrifice single responsibility for calculation efficiency)
 boolean isInTriangle(PVector[] triangleVertices, PVector point){
   boolean result = false;
+
+  //used for Barycentric shading
+  float A, A0, A1, A2, u, v, w;
+
   //subtract point from tx then ty and tz
-  PVector px = triangleVertices[0].copy().sub(point);
-  PVector py = triangleVertices[1].copy().sub(point);
-  PVector pz = triangleVertices[2].copy().sub(point);
+  PVector p0 = triangleVertices[0].copy().sub(point);
+  PVector p1 = triangleVertices[1].copy().sub(point);
+  PVector p2 = triangleVertices[2].copy().sub(point);
 
   //get triangle's edges. Gives e1, e2, e3 in order
   PVector[] edges = getTriangleEdges(triangleVertices);
 
-  //perform the test
-  PVector result1 = edges[0].cross(px);
-  PVector result2 = edges[1].cross(py);
-  PVector result3 = edges[2].cross(pz);
+  // do cross products between edge vector and point vector
+  PVector e0p0 = edges[0].cross(p0);
+  PVector e1p1 = edges[1].cross(p1);
+  PVector e2p2 = edges[2].cross(p2);
 
+
+  //Performing point in triangle test
   //if all the results have same sign or 0, the point is inside the triangle
-  if(result1.z >= 0 && result2.z >= 0 && result3.z >= 0){
+  if(e0p0.z >= 0 && e1p1.z >= 0 && e2p2.z >= 0){
     result = true;
-  } else if(result1.z <= 0 && result2.z <= 0 && result3.z <= 0){
+  } else if(e0p0.z <= 0 && e1p1.z <= 0 && e2p2.z <= 0){
     result = true;
   }
   
+  if(shadingMode == ShadingMode.FLAT){
+    setColor(FLAT_FILL_COLOR);
+  } else if(shadingMode == ShadingMode.BARYCENTRIC){
+    // perform the barycentric coordinate calculations
+    A0 = 0.5 * e1p1.z;
+    A1 = 0.5 * e2p2.z;
+    A2 = 0.5 * e0p0.z;
+    // Calculate the total area
+    A = A0 + A1 + A2;
+    // Calculate barycentric coordinates
+    u = A0 / A;
+    v = A1 / A;
+    w = A2 / A;
+    setColor(u, v, w);
+  }
   return result;
 }
 
