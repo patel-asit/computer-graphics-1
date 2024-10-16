@@ -1,7 +1,6 @@
 final char KEY_NEXT_SHADING = 's';
 final char KEY_PREV_SHADING = 'w';
 
-final int NUM_DISPLAY_MODES = DisplayMode.values().length;
 final int NUM_SHADING_MODES = ShadingMode.values().length;
 
 enum ShadingMode {
