@@ -53,8 +53,8 @@ void setColor(color c) {
 // draw a pixel at the given location
 void setPixel(float x, float y) {
   int index = indexFromXYCoord(x, y);
-  if (0 <= index && index < buffer.pixels.length) {
-    buffer.pixels[index] = stateColor;
+  if (0 <= index && index < pixels.length) {
+    pixels[index] = stateColor;
   } else {
     println("ERROR:  this pixel is not within the raster.");
   }
