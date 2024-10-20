@@ -37,6 +37,7 @@ class Plane {
         if(intersection == null){
             return null;
         } else {
+            color phong = new PhongLighting(normal, intersection, col).calculate();
             return new IntersectionPoint(intersection, col);
         }
     }

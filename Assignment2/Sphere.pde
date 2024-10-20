@@ -59,6 +59,7 @@ class Sphere {
         if(intersection == null){
             return null;
         } else {
+            normal = PVector.sub(intersection, center).normalize();
             color phong = new PhongLighting(normal, intersection, col).calculate();
             return new IntersectionPoint(intersection, phong);
         }

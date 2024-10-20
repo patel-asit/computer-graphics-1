@@ -13,8 +13,8 @@ class PhongLighting {
     PhongLighting(PVector normal, PVector point, color shapeColor) {
         this.normal = normal;
         this.point = point;
-        this.lightPos = PVector.sub(point, LIGHT).normalize();
-        this.viewer = PVector.sub(point, EYE).normalize();
+        this.lightPos = PVector.sub(LIGHT, point).normalize();
+        this.viewer = PVector.sub(EYE, point).normalize();
         this.reflection = PVector.sub(PVector.mult(normal, 2 * PVector.dot(normal, lightPos)), lightPos).normalize();
         this.shapeColor = shapeColor;
     }
@@ -23,19 +23,19 @@ class PhongLighting {
         if(shadingMode == shadingMode.FLAT){
             return shapeColor;
         }
-
+  
         float phongR, phongG, phongB;
 
         // ambient color
-        float ambientR = red(shapeColor) * MATERIAL[A];
+        float ambientR = red(shapeColor)   * MATERIAL[A];
         float ambientG = green(shapeColor) * MATERIAL[A];
-        float ambientB = blue(shapeColor) * MATERIAL[A];
+        float ambientB = blue(shapeColor)  * MATERIAL[A];
 
         // diffuse color
         float dotProd = PVector.dot(normal, lightPos);
-        float diffuseR = dotProd * red(shapeColor) * MATERIAL[D];
+        float diffuseR = dotProd * red(shapeColor)   * MATERIAL[D];
         float diffuseG = dotProd * green(shapeColor) * MATERIAL[D];
-        float diffuseB = dotProd * blue(shapeColor) * MATERIAL[D];
+        float diffuseB = dotProd * blue(shapeColor)  * MATERIAL[D];
 
         // specular color
         float specDotProd = PVector.dot(reflection, viewer);
