@@ -5,6 +5,13 @@
 
 final color BLACK = color(0);
 final color WHITE = color(255);
+final color RED = color(255, 0, 0);
+final color GREEN = color(0, 255, 0);
+final color BLUE = color(0, 0, 255);
+final color YELLOW = color(255, 255, 0);
+final color CYAN = color(0, 255, 255);
+final color MAGENTA = color(255, 0, 255);
+
 int numPixels;
 
 void setup() {
@@ -36,13 +43,15 @@ void draw() {
   updatePixels();
 }
 
-void drawShapes() {
-  PVector Dij;
-  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, color(0.5, 0.5, 0.5));
-  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, color(0.5, 1, 1));
-  Sphere sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, color(0.5, 1, 0.1));
-
+void drawShapes(){
+  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, GREEN);
+  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, CYAN);
+  Sphere sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, RED);
+  Plane plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
+  
   IntersectionPoint ip, ip2;
+  PVector Dij;
+
   //traverse the raster to draw the pixels
   for(int i=0; i<RASTER_WIDTH; i++){
     for(int j=0; j<RASTER_HEIGHT; j++){
@@ -51,7 +60,7 @@ void drawShapes() {
       // ip = sphere1.checkIntersection(Dij);
       // ip2 = sphere2.checkIntersection(Dij);
 
-      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij), sphere3.checkIntersection(Dij)});
+      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij), sphere3.checkIntersection(Dij), plane.checkIntersection(Dij)});
       //  YOU NEED TO GET ALL THE INTERSECTIONS AND THEN COMPARE THEM
       // THEN USE THE COLOR OF CLOSEST ONE AND setPixel(i,j) TO THAT COLOR
       //if the intersection point is not null, set the pixel
