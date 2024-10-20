@@ -39,7 +39,6 @@ void draw() {
 
   // } else if (shadingMode == shadingMode.REFLECTIONS_SHADOWS) {
 
-
   // }
   updatePixels();
 }

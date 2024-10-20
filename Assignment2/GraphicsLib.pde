@@ -33,7 +33,7 @@ PVector EYE = new PVector(0, 0, 0); // at the origin
 // Phong lighting parameters
 PVector LIGHT = new PVector(-10, -10, -50); // above and behind the EYE
 
-final float[] MATERIAL = {0.34, 0.44, 0.4}; // A, D, S
+final float[] MATERIAL = {0.4, 0.5, 0.4}; // A, D, S
 final float PHONG_SHININESS = 100; // exponent
 
 /*
