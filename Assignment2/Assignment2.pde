@@ -4,6 +4,7 @@
  */
 
 final color BLACK = color(0);
+final color WHITE = color(255);
 int numPixels;
 
 void setup() {
@@ -22,17 +23,11 @@ void draw() {
   colorMode(RGB, 1.0f);
   background(BLACK);
 
-  /*
-  CAUTION: none of your functions should call loadPixels() or updatePixels().
-   This is already done in the template. Extra calls will probably break things.
-   */
-  //clearCanvasToBlack();
-
   if (shadingMode == shadingMode.FLAT) {
 
 
   } else if (shadingMode == shadingMode.PHONG_LIGHTING) {
-    
+
 
   } else if (shadingMode == shadingMode.REFLECTIONS_SHADOWS) {
 
@@ -57,11 +52,3 @@ Add helper functions for coordinate conversions
  int getPixel(int row, int col){
     return  row * width + col;
  }
-
- void clearCanvasToBlack() {
-  loadPixels();
-  for (int i=0; i<numPixels; i++) {
-    pixels[i] = BLACK;
-  }
-  updatePixels();
-}
