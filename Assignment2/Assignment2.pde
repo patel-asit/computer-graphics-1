@@ -13,6 +13,7 @@ void setup() {
   size(800, 800);
   numPixels = width * height;
   printSettings();
+  noLoop();
 }
 
 /*
@@ -22,10 +23,9 @@ You should read this function carefully and understand how it works,
 void draw() {
   colorMode(RGB, 1.0f);
   background(BLACK);
-
+  loadPixels();
   if (shadingMode == shadingMode.FLAT) {
-
-
+    drawShapes();
   } else if (shadingMode == shadingMode.PHONG_LIGHTING) {
 
 
@@ -33,22 +33,66 @@ void draw() {
 
 
   }
+  updatePixels();
 }
 
-/*
-Given a point p, unit normal vector n, eye location, light location, and various
- material properties, calculate the Phong lighting at that point (see course
- notes and the assignment instructions for more details).
- Return an array of length 3 containing the calculated RGB values.
- */
-float[] phong(PVector p, PVector n, PVector eye, PVector light,
-  float[] material, float[][] fillColor, float shininess) {
-  return null;
+void drawShapes() {
+  PVector Dij;
+  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+5), 5, color(0.5, 0.5, 0.5));
+  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+3), 2, color(0.5, 1, 1));
+
+  IntersectionPoint ip, ip2;
+  //traverse the raster to draw the pixels
+  for(int i=0; i<RASTER_WIDTH; i++){
+    for(int j=0; j<RASTER_HEIGHT; j++){
+      //make Pij in the loop and get Dij so Rij(t) = E + tDij for some t>0
+      Dij = getPij(i,j).normalize();
+      // ip = sphere1.checkIntersection(Dij);
+      // ip2 = sphere2.checkIntersection(Dij);
+
+      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij)});
+      //  YOU NEED TO GET ALL THE INTERSECTIONS AND THEN COMPARE THEM
+      // THEN USE THE COLOR OF CLOSEST ONE AND setPixel(i,j) TO THAT COLOR
+      //if the intersection point is not null, set the pixel
+      // if(ip2.getIntersection() != null){
+      //   setColor(ip2.getCol());
+      //   //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
+      //   setPixel(i,j);
+      // }
+      if(ip!=null){
+        setColor(ip.getCol());
+        //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
+        setPixel(i,j);
+      }
+    }
+  }
 }
 
+// This returns null if there are no shapes with intersection points for this pixel ray
+IntersectionPoint closestShape(IntersectionPoint[] shapes){
+  //return the closest shape
+  IntersectionPoint closest = null;
+
+  for(IntersectionPoint shape : shapes){
+    if(shape != null){
+      if(closest == null){
+        closest = shape;
+      } else {
+        if(PVector.dist(EYE.z, shape.getIntersection().z) < PVector.dist(EYE.z, closest.getIntersection().z)){
+          closest = shape;
+        }
+      }
+    }
+  }
+
+  return closest;
+}
 /*
 Add helper functions for coordinate conversions
  */
- int getPixel(int row, int col){
-    return  row * width + col;
+ PVector getPij(int col, int row){
+    float x = RASTER_LEFT + (RASTER_RIGHT - RASTER_LEFT) * (col + 0.5) / RASTER_WIDTH;
+    float y = RASTER_BOTTOM + (RASTER_TOP - RASTER_BOTTOM) * (row + 0.5) / RASTER_HEIGHT;
+    float z = RASTER_Z;
+    return new PVector(x, y, z);
  }

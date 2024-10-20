@@ -2,7 +2,7 @@ class IntersectionPoint {
     PVector intersection;
     color col;
 
-    IntersectionPoint(PVector intersection, float[] col) {
+    IntersectionPoint(PVector intersection, color col) {
         this.intersection = intersection;
         this.col = col;
     }
@@ -12,7 +12,7 @@ class IntersectionPoint {
         return intersection;
     }
 
-    float[] getCol() {
+    color getCol() {
         return col;
     }
 }

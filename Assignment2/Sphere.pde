@@ -13,16 +13,16 @@ class Sphere {
     IntersectionPoint checkIntersection(PVector normalized_ray) {
         //gotta check if normalized_ray will have NaN values or not
         //if it does, then return some predefined null value
-        if(normalized_ray.x == null || normalized_ray.y == null || normalized_ray.z == null){
+        if(normalized_ray == null || Float.isNaN(normalized_ray.x) || Float.isNaN(normalized_ray.y) || Float.isNaN(normalized_ray.z)){
             System.out.println("Normalized ray has NaN values");
             return null;
         }
 
         PVector F = PVector.sub(EYE, center);
-        PVector Rt1, Rt2, intersection;
+        PVector Rt1=null, Rt2=null, intersection=null;
         float t1, t2;
         float a = 1;
-        float b = 2 * PVector.dot(Dij, F);
+        float b = 2 * PVector.dot(normalized_ray, F);
         float c = PVector.dot(F,F) - sq(radius);
         float discriminant = sqrt(sq(b) - 4*a*c); //DO NOT CALCULATE ANYTHING IF THIS IS < 0
 
@@ -33,29 +33,34 @@ class Sphere {
 
         t1 = (-b - discriminant)/(2*a);
         t2 = (-b + discriminant)/(2*a);
-
-        if(t1 != null or !Float.isNaN(t1)){
-            Rt1 = PVector.add(EYE, PVector.mult(Dij, t1));
+        if(!Float.isNaN(t1) && t1 >= 0){
+            Rt1 = PVector.add(EYE, PVector.mult(normalized_ray, t1));
             intersection = Rt1;
         }
 
-        if(t2 != null && !Float.isNaN(t2)){
-            Rt2 = PVector.add(EYE, PVector.mult(Dij, t2));
+        if(!Float.isNaN(t2) && t2 >= 0){
+            Rt2 = PVector.add(EYE, PVector.mult(normalized_ray, t2));
             intersection = Rt2;
         }
 
-        // if t1 and t2 are present, find the closer intersection point
-        if(t1 != null && t2 != null && !Float.isNaN(t1) && !Float.isNaN(t2)){
+        // if t1 and t2 are both present, then overwrite the variable with the closer intersection point
+        if(!Float.isNaN(t1) && !Float.isNaN(t2)){
             if(t1 < t2){
                 intersection = Rt1;
             } else {
                 intersection = Rt2;
             }
         }
+        // if(intersection != null){
+        //     System.out.println("t1: " + t1 + " t2: " + t2 + " intersection: " + intersection);  
+        // }
 
-        // for now return with flat color too, afterwards calculate phong too
-        // return the array of PVector
-        return new IntersectionPoint(intersection, col);
+        // for now return with flat color, afterwards calculate phong too
+        if(intersection == null){
+            return null;
+        } else {
+            return new IntersectionPoint(intersection, col);
+        }
     }
 
     //make getters for radius and center

@@ -60,35 +60,20 @@ void setColor(color c) {
   stateColor = c;
 }
 
+
+// HOW TO DRAW A RASTER?? HAVE I FIGURED OUT X Y Z PLACE FOR THAT WINDOW
+// FIGURE OUT HOW ITS CURRENTLY SHOWING UP AND MAKE SURE IF ITS GONNA WORK
+
 // draw a pixel at the given location
-void setPixel(float x, float y) {
-  int index = indexFromXYCoord(x, y);
-  if (0 <= index && index < pixels.length) {
+void setPixel(int i, int j) {
+  int index = getIndex(i, j);
+  if (0 <= index && index < numPixels) {
     pixels[index] = stateColor;
   } else {
     println("ERROR:  this pixel is not within the raster.");
   }
 }
 
-void setPixel(PVector p) {
-  setPixel(p.x, p.y);
-}
-
-// helper functions for pixel calculations
-int indexFromXYCoord(float x, float y) {
-  int col = colNumFromXCoord(x);
-  int row = rowNumFromYCoord(y);
-  return indexFromColRow(col, row);
-}
-
-int indexFromColRow(int col, int row) {
+int getIndex(int col, int row) {
   return row*width + col;
-}
-
-int colNumFromXCoord(float x) {
-  return (int)round(x + width/2);
-}
-
-int rowNumFromYCoord(float y) {
-  return (int)round(height/2 - y);
 }
