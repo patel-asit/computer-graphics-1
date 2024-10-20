@@ -57,18 +57,9 @@ void drawShapes(){
     for(int j=0; j<RASTER_HEIGHT; j++){
       //make Pij in the loop and get Dij so Rij(t) = E + tDij for some t>0
       Dij = getPij(i,j).normalize();
-      // ip = sphere1.checkIntersection(Dij);
-      // ip2 = sphere2.checkIntersection(Dij);
 
       ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij), sphere3.checkIntersection(Dij), plane.checkIntersection(Dij)});
-      //  YOU NEED TO GET ALL THE INTERSECTIONS AND THEN COMPARE THEM
-      // THEN USE THE COLOR OF CLOSEST ONE AND setPixel(i,j) TO THAT COLOR
-      //if the intersection point is not null, set the pixel
-      // if(ip2.getIntersection() != null){
-      //   setColor(ip2.getCol());
-      //   //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
-      //   setPixel(i,j);
-      // }
+
       if(ip!=null){
         setColor(ip.getCol());
         //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
