@@ -8,6 +8,7 @@ class Sphere {
         this.center = center;
         this.radius = radius;
         this.col = col;
+        this.normal = PVector.sub(center, EYE).normalize();
     }
 
     IntersectionPoint checkIntersection(PVector normalized_ray) {
@@ -54,12 +55,12 @@ class Sphere {
         // if(intersection != null){
         //     System.out.println("t1: " + t1 + " t2: " + t2 + " intersection: " + intersection);  
         // }
-
         // for now return with flat color, afterwards calculate phong too
         if(intersection == null){
             return null;
         } else {
-            return new IntersectionPoint(intersection, col);
+            color phong = new PhongLighting(normal, intersection, col).calculate();
+            return new IntersectionPoint(intersection, phong);
         }
     }
 

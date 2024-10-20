@@ -31,25 +31,26 @@ void draw() {
   colorMode(RGB, 1.0f);
   background(BLACK);
   loadPixels();
-  if (shadingMode == shadingMode.FLAT) {
-    drawShapes();
-  } else if (shadingMode == shadingMode.PHONG_LIGHTING) {
+  drawShapes();
+  // if (shadingMode == shadingMode.FLAT) {
+  //   drawShapes();
+  // } else if (shadingMode == shadingMode.PHONG_LIGHTING) {
 
 
-  } else if (shadingMode == shadingMode.REFLECTIONS_SHADOWS) {
+  // } else if (shadingMode == shadingMode.REFLECTIONS_SHADOWS) {
 
 
-  }
+  // }
   updatePixels();
 }
 
 void drawShapes(){
   Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, GREEN);
-  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, CYAN);
+  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, BLUE);
   Sphere sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, RED);
   Plane plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
   
-  IntersectionPoint ip, ip2;
+  IntersectionPoint ip;
   PVector Dij;
 
   //traverse the raster to draw the pixels
@@ -58,7 +59,7 @@ void drawShapes(){
       //make Pij in the loop and get Dij so Rij(t) = E + tDij for some t>0
       Dij = getPij(i,j).normalize();
 
-      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij), sphere3.checkIntersection(Dij), plane.checkIntersection(Dij)});
+      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere3.checkIntersection(Dij), sphere2.checkIntersection(Dij), plane.checkIntersection(Dij)});
 
       if(ip!=null){
         setColor(ip.getCol());
