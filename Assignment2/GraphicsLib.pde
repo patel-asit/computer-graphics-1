@@ -1,3 +1,12 @@
+//raster coordinates
+final int RASTER_Z = 16;
+final int RASTER_LEFT = -10;
+final int RASTER_RIGHT = 10;
+final int RASTER_BOTTOM = -10;
+final int RASTER_TOP= 10;
+final int RASTER_WIDTH = 800;
+final int RASTER_HEIGHT= 800;
+
 // useful constants
 final int NUM_DIMENSIONS = 3;
 
@@ -15,25 +24,14 @@ final int D = 1;
 final int S = 2;
 final int NUM_LIGHT_COMPONENTS = 3;
 
-// colors for drawing and filling triangles
-final float[] OUTLINE_COLOR = {1.0f, 0.3f, .1f};
-final float[] FLAT_FILL_COLOR = {1f, 1f, 1f};
+// colors for drawing and filling
 final float[][] PHONG_COLORS = {{0.15f, 0.65f, 1f}, {0.15f, 0.65f, 1f}, {1f, 1f, 1f}} ; // A, D, S colors
 
 // for projection and lighting
-PVector EYE = new PVector(0, 0, 0); // location
+PVector EYE = new PVector(0, 0, 0); // at the origin
 
 // Phong lighting parameters
-PVector LIGHT = new PVector(300, 300, 350); // location
-
-//raster coordinates
-final int RASTER_Z = 16;
-final int RASTER_LEFT = -10;
-final int RASTER_RIGHT = 10;
-final int RASTER_BOTTOM = -10;
-final int RASTER_TOP= 10;
-final int RASTER_WIDTH = 800;
-final int RASTER_HEIGHT= 800;
+PVector LIGHT = new PVector(0, 10, -10); // above and behind the EYE
 
 final float[] MATERIAL = {0.4, 0.5, 0.5}; // A, D, S
 final float PHONG_SHININESS = 100; // exponent
@@ -59,10 +57,6 @@ void setColor(float red, float green, float blue) {
 void setColor(color c) {
   stateColor = c;
 }
-
-
-// HOW TO DRAW A RASTER?? HAVE I FIGURED OUT X Y Z PLACE FOR THAT WINDOW
-// FIGURE OUT HOW ITS CURRENTLY SHOWING UP AND MAKE SURE IF ITS GONNA WORK
 
 // draw a pixel at the given location
 void setPixel(int i, int j) {
