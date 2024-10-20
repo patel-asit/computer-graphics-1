@@ -4,12 +4,11 @@ final char KEY_PREV_SHADING = 'w';
 final int NUM_SHADING_MODES = ShadingMode.values().length;
 
 enum ShadingMode {
-    NONE, // no shading
     FLAT, // solid colour
     PHONG_LIGHTING, // visualize barycentric coords
     REFLECTIONS_SHADOWS, // Phong lighting calculated at triangle centers
 }
-ShadingMode shadingMode = ShadingMode.NONE;
+ShadingMode shadingMode = ShadingMode.FLAT;
 
 void keyPressed() {
   if (key == KEY_NEXT_SHADING) {

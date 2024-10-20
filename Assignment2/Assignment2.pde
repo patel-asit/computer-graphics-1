@@ -38,8 +38,9 @@ void draw() {
 
 void drawShapes() {
   PVector Dij;
-  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+5), 5, color(0.5, 0.5, 0.5));
-  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+3), 2, color(0.5, 1, 1));
+  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, color(0.5, 0.5, 0.5));
+  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, color(0.5, 1, 1));
+  Sphere sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, color(0.5, 1, 0.1));
 
   IntersectionPoint ip, ip2;
   //traverse the raster to draw the pixels
@@ -50,7 +51,7 @@ void drawShapes() {
       // ip = sphere1.checkIntersection(Dij);
       // ip2 = sphere2.checkIntersection(Dij);
 
-      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij)});
+      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere2.checkIntersection(Dij), sphere3.checkIntersection(Dij)});
       //  YOU NEED TO GET ALL THE INTERSECTIONS AND THEN COMPARE THEM
       // THEN USE THE COLOR OF CLOSEST ONE AND setPixel(i,j) TO THAT COLOR
       //if the intersection point is not null, set the pixel
@@ -78,7 +79,7 @@ IntersectionPoint closestShape(IntersectionPoint[] shapes){
       if(closest == null){
         closest = shape;
       } else {
-        if(PVector.dist(EYE.z, shape.getIntersection().z) < PVector.dist(EYE.z, closest.getIntersection().z)){
+        if (shape.getIntersection().z < closest.getIntersection().z) {
           closest = shape;
         }
       }
