@@ -12,6 +12,11 @@ final color YELLOW = color(255, 255, 0);
 final color CYAN = color(0, 255, 255);
 final color MAGENTA = color(255, 0, 255);
 
+// Define the shapes with their respective parameters
+
+Shape sphere1, sphere2, plane, cylinder, cone;
+Shape[] shapes;
+
 int numPixels;
 
 void setup() {
@@ -21,6 +26,18 @@ void setup() {
   numPixels = width * height;
   printSettings();
   noLoop();
+
+  // Sphere(center, radius, color)
+sphere1 = new Sphere(new PVector(-5, 5, RASTER_Z + 15), 5, GREEN); // Sphere with center at (-5, 5, RASTER_Z+15), radius 5, color GREEN
+sphere2 = new Sphere(new PVector(4, -2, RASTER_Z + 40), 15, RED);  // Sphere with center at (4, -2, RASTER_Z+40), radius 15, color RED
+// Plane(point, normal, color)
+plane = new Plane(new PVector(10, 15, RASTER_Z + 7), new PVector(0, 1, 0), MAGENTA); // Plane with point (10, 15, RASTER_Z+7), normal vector (0, 1, 0), color MAGENTA
+// Cylinder(center, radius, color, height)
+cylinder = new Cylinder(new PVector(5, 5, RASTER_Z + 2), 2, BLUE, 6); // Cylinder with base center at (5, 5, RASTER_Z+2), radius 2, color BLUE, height 6
+// Cone(apex, radius, color, height)
+cone = new Cone(new PVector(-5, 0, RASTER_Z + 5), 0.9, YELLOW, 10); // Cone with apex at (-5, 0, RASTER_Z+5), radius 0.9, color YELLOW, height 10
+// Array of shapes
+shapes = new Shape[] { sphere1, sphere2, plane, cylinder, cone };
 }
 
 /*
@@ -32,26 +49,10 @@ void draw() {
   background(BLACK);
   loadPixels();
   drawShapes();
-  // if (shadingMode == shadingMode.FLAT) {
-  //   drawShapes();
-  // } else if (shadingMode == shadingMode.PHONG_LIGHTING) {
-
-
-  // } else if (shadingMode == shadingMode.REFLECTIONS_SHADOWS) {
-
-  // }
   updatePixels();
 }
 
 void drawShapes(){
-  
-  Shape sphere1 = new Sphere(new PVector(-5, 5, RASTER_Z+15), 5, GREEN);
-  Shape sphere2 = new Sphere(new PVector(4, -2, RASTER_Z+40), 15, RED);
-  Shape plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
-  Shape cylinder = new Cylinder(new PVector(5, 5, RASTER_Z+2), 2, BLUE, 6);
-  Shape cone = new Cone(new PVector(-5, 0, RASTER_Z+5), 0.9, YELLOW, 10);
-  Shape[] shapes = { sphere1, sphere2, plane, cylinder, cone };
-
   IntersectionPoint ip;
   PVector Dij;
 
@@ -62,18 +63,13 @@ void drawShapes(){
       Dij = getPij(i,j).normalize();
 
       ip = closestIntersection(shapes, Dij);
-      // ip = closestShape(new Shape[]{sphere1, sphere3, sphere2, plane}, EYE, Dij);
-      // System.out.println("IP: " + ip + " i: " + i + " j: " + j);
       if(ip!=null){
-        //check if i need to draw shadow
-        // if(drawShadow(ip.getIntersection(), shapes)){
-        //   setColor(ip.getAmbient());
-        //   // setColor(BLACK);
-        // }else{
-        //   setColor(ip.getCol());
-        // }
-        setColor(ip.getCol());
-        //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
+
+        if(drawShadow(ip.getIntersection(), shapes)){
+          setColor(ip.getAmbient());
+        }else{
+          setColor(ip.getCol());
+        }
         setPixel(i,j);
       }
     }

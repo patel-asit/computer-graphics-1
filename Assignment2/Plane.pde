@@ -9,8 +9,7 @@ class Plane extends Shape{
     }
 
     IntersectionPoint checkIntersection(PVector normalized_ray, PVector origin) {
-        //gotta check if normalized_ray will have NaN values or not
-        //if it does, then return some predefined null value
+        // return early if normalized_ray has NaN values 
         if(normalized_ray == null || Float.isNaN(normalized_ray.x) || Float.isNaN(normalized_ray.y) || Float.isNaN(normalized_ray.z)){
             System.out.println("Normalized ray has NaN values");
             return null;
