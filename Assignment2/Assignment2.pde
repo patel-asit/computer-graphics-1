@@ -45,12 +45,12 @@ void draw() {
 
 void drawShapes(){
   
-  Shape sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, GREEN);
-  Shape sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, BLUE);
-  Shape sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, RED);
+  Shape sphere1 = new Sphere(new PVector(-5, 5, RASTER_Z+15), 5, GREEN);
+  Shape sphere2 = new Sphere(new PVector(4, -2, RASTER_Z+40), 15, RED);
   Shape plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
-  Shape cylinder = new Cylinder(new PVector(5, 5, RASTER_Z+2), 4, YELLOW, 6);
-  Shape[] shapes = {sphere1, sphere2, sphere3, plane, cylinder};
+  Shape cylinder = new Cylinder(new PVector(5, 5, RASTER_Z+2), 2, BLUE, 6);
+  Shape cone = new Cone(new PVector(-5, 0, RASTER_Z+5), 0.9, YELLOW, 10);
+  Shape[] shapes = { sphere1, sphere2, plane, cylinder, cone };
 
   IntersectionPoint ip;
   PVector Dij;
