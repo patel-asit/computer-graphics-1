@@ -44,11 +44,14 @@ void draw() {
 }
 
 void drawShapes(){
-  Sphere sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, GREEN);
-  Sphere sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, BLUE);
-  Sphere sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, RED);
-  Plane plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
   
+  Shape sphere1 = new Sphere(new PVector(5, 5, RASTER_Z+15), 5, GREEN);
+  Shape sphere2 = new Sphere(new PVector(2, 2, RASTER_Z+30), 10, BLUE);
+  Shape sphere3 = new Sphere(new PVector(-2, -2, RASTER_Z+40), 15, RED);
+  Shape plane = new Plane(new PVector(10, 15, RASTER_Z+7), new PVector(0, 1, 0), MAGENTA);
+  Shape cylinder = new Cylinder(new PVector(5, 5, RASTER_Z+2), 4, YELLOW, 6);
+  Shape[] shapes = {sphere1, sphere2, sphere3, plane, cylinder};
+
   IntersectionPoint ip;
   PVector Dij;
 
@@ -58,9 +61,17 @@ void drawShapes(){
       //make Pij in the loop and get Dij so Rij(t) = E + tDij for some t>0
       Dij = getPij(i,j).normalize();
 
-      ip = closestShape(new IntersectionPoint[]{sphere1.checkIntersection(Dij), sphere3.checkIntersection(Dij), sphere2.checkIntersection(Dij), plane.checkIntersection(Dij)});
-
+      ip = closestIntersection(shapes, Dij);
+      // ip = closestShape(new Shape[]{sphere1, sphere3, sphere2, plane}, EYE, Dij);
+      // System.out.println("IP: " + ip + " i: " + i + " j: " + j);
       if(ip!=null){
+        //check if i need to draw shadow
+        // if(drawShadow(ip.getIntersection(), shapes)){
+        //   setColor(ip.getAmbient());
+        //   // setColor(BLACK);
+        // }else{
+        //   setColor(ip.getCol());
+        // }
         setColor(ip.getCol());
         //System.out.print("Solutions at i=" + i + " j=" + j + "\t");
         setPixel(i,j);
@@ -70,17 +81,18 @@ void drawShapes(){
 }
 
 // This returns null if there are no shapes with intersection points for this pixel ray
-IntersectionPoint closestShape(IntersectionPoint[] shapes){
+IntersectionPoint closestIntersection(Shape[] shapes, PVector normalized_ray){
   //return the closest shape
-  IntersectionPoint closest = null;
+  IntersectionPoint closest = null, current = null;
 
-  for(IntersectionPoint shape : shapes){
-    if(shape != null){
+  for(Shape shape : shapes){
+    current = shape.checkIntersection(normalized_ray, EYE);
+    if(current != null){
       if(closest == null){
-        closest = shape;
+        closest = current;
       } else {
-        if (shape.getIntersection().z < closest.getIntersection().z) {
-          closest = shape;
+        if (current.getIntersection().z < closest.getIntersection().z) {
+          closest = current;
         }
       }
     }
@@ -89,11 +101,28 @@ IntersectionPoint closestShape(IntersectionPoint[] shapes){
   return closest;
 }
 /*
-Add helper functions for coordinate conversions
- */
- PVector getPij(int col, int row){
-    float x = RASTER_LEFT + (RASTER_RIGHT - RASTER_LEFT) * (col + 0.5) / RASTER_WIDTH;
-    float y = RASTER_BOTTOM + (RASTER_TOP - RASTER_BOTTOM) * (row + 0.5) / RASTER_HEIGHT;
-    float z = RASTER_Z;
-    return new PVector(x, y, z);
- }
+  Add helper functions for coordinate conversions
+*/
+PVector getPij(int col, int row){
+  float x = RASTER_LEFT + (RASTER_RIGHT - RASTER_LEFT) * (col + 0.5) / RASTER_WIDTH;
+  float y = RASTER_BOTTOM + (RASTER_TOP - RASTER_BOTTOM) * (row + 0.5) / RASTER_HEIGHT;
+  float z = RASTER_Z;
+  return new PVector(x, y, z);
+}
+
+// The intersection point on the shape becomes the origin for a new ray
+// The new ray will point towards the light source
+
+boolean drawShadow(PVector origin, Shape[] shapes){
+  boolean result = false;
+  PVector ray = PVector.sub(LIGHT, origin).normalize();
+  
+  for(Shape shape : shapes){
+    if(shape.checkIntersection(ray, origin) != null){
+      result = true;
+    }
+  }
+  // return result;
+  return false;
+}
+ 

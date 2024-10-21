@@ -1,14 +1,19 @@
-class Sphere extends Shape{
+class Cylinder extends Shape{
     PVector center;
     PVector normal; //DO I NEED THIS?? I DONT HAVE NORMAL VECTORS FOR SPHERES BUT HAVE FOR POINTS
     float radius;
     color col; // SHOULD THIS BE  A float[] ??
-
-    Sphere(PVector center, float radius, color col) {
+    int length;
+    float yMin, yMax;
+    Cylinder(PVector center, float radius, color col, int length){
         super(col);
         this.center = center;
         this.radius = radius;
-        this.normal = PVector.sub(center, EYE).normalize();
+        this.length = length;
+
+        this.yMin = center.y - length/2;
+        this.yMax = center.y + length/2;
+        // this.normal = PVector.sub(center, EYE).normalize();
     }
 
     IntersectionPoint checkIntersection(PVector normalized_ray, PVector origin) {
@@ -18,13 +23,17 @@ class Sphere extends Shape{
             System.out.println("Normalized ray has NaN values");
             return null;
         }
+        
+        
 
-        PVector F = PVector.sub(origin, center);
         PVector Rt1=null, Rt2=null, intersection=null;
         float t1, t2;
-        float a = 1;
-        float b = 2 * PVector.dot(normalized_ray, F);
-        float c = PVector.dot(F,F) - sq(radius);
+
+        PVector F = PVector.sub(origin, center);
+
+        float a = sq(normalized_ray.x) + sq(normalized_ray.z);
+        float b = 2 * (normalized_ray.x * F.x + normalized_ray.z * F.z);
+        float c = sq(F.x) + sq(F.z) - sq(radius);
         float discriminant = sqrt(sq(b) - 4*a*c); //DO NOT CALCULATE ANYTHING IF THIS IS < 0
 
         if (discriminant < 0){
@@ -34,6 +43,9 @@ class Sphere extends Shape{
 
         t1 = (-b - discriminant)/(2*a);
         t2 = (-b + discriminant)/(2*a);
+
+
+        // System.out.println("t1: " + t1 + " t2: " + t2);
         if(!Float.isNaN(t1) && t1 >= 0){
             Rt1 = PVector.add(origin, PVector.mult(normalized_ray, t1));
             intersection = Rt1;
@@ -42,18 +54,27 @@ class Sphere extends Shape{
         if(!Float.isNaN(t2) && t2 >= 0){
             Rt2 = PVector.add(origin, PVector.mult(normalized_ray, t2));
             intersection = Rt2;
+            // System.out.println("I am here");
+            // System.out.println("Intersection: " + intersection);
         }
 
         // if t1 and t2 are both present, then overwrite the variable with the closer intersection point
-        if(!Float.isNaN(t1) && !Float.isNaN(t2)){
+        if(!Float.isNaN(t1) && !Float.isNaN(t2) && t1>=0 && t2>=0){
+            // System.out.println("t1: " + t1 + " t2: " + t2);
             if(t1 < t2){
                 intersection = Rt1;
             } else {
                 intersection = Rt2;
             }
+
+            //bound the yMin and yMax
+            if(intersection.y < yMin || intersection.y > yMax){
+                intersection = null;
+            }
         }
 
         if(intersection == null){
+            // System.out.println("I should not be here.");
             return null;
         } else {
             normal = PVector.sub(intersection, center).normalize();

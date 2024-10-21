@@ -1,10 +1,12 @@
 class IntersectionPoint {
     PVector intersection;
     color col;
+    color ambientOnly;
 
-    IntersectionPoint(PVector intersection, color col) {
+    IntersectionPoint(PVector intersection, color col, color ambientOnly) {
         this.intersection = intersection;
         this.col = col;
+        this.ambientOnly = ambientOnly;
     }
 
     // getters
@@ -14,5 +16,9 @@ class IntersectionPoint {
 
     color getCol() {
         return col;
+    }
+
+    color getAmbient() {
+        return ambientOnly;
     }
 }

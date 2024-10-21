@@ -31,6 +31,10 @@ class PhongLighting {
         float ambientG = green(shapeColor) * MATERIAL[A];
         float ambientB = blue(shapeColor)  * MATERIAL[A];
 
+        if(ambientOnly){
+            return color(ambientR, ambientG, ambientB);
+        }
+
         // diffuse color
         float dotProd = PVector.dot(normal, lightPos);
         float diffuseR = dotProd * red(shapeColor)   * MATERIAL[D];
