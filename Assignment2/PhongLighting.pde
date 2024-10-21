@@ -19,7 +19,7 @@ class PhongLighting {
         this.shapeColor = shapeColor;
     }
 
-    color calculate(){
+    color calculate(boolean ambientOnly){
         if(shadingMode == shadingMode.FLAT){
             return shapeColor;
         }
