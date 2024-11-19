@@ -32,7 +32,16 @@ PMatrix2D getOrtho(float left, float right, float bottom, float top) {
 
 // construct camera matrix using camera position, up vector, and zoom setting
 PMatrix2D getCamera(PVector center, PVector up, PVector perp, float zoom) {
-  return null;
+  
+  PMatrix2D invertedB, translation;
+  
+  invertedB = invertBasis(up, perp);
+  translation = new PMatrix2D(
+    1, 0, -center.x,
+    0, 1, -center.y;
+  );
+
+  return scaleMatrix(zoom).apply(invertedB.apply(translation));
 }
 
 /*
@@ -77,20 +86,24 @@ void myVertex(PVector vertex) {
   myVertex(vertex.x, vertex.y);
 }
 
-PMatrix2D myBasisInvert(PMatrix2D basis){
-  float determinant = 1/(basis.m00*basis.m11 - basis.m01*basis.m10);
-  
-  PMatrix2D = 
-
-}
-
 PMatrix2D invertBasis(PVector u, PVector v){
   float determinant = 1/(u.x*v.y - v.x*u.y);
   
   PMatrix2D invertedBasis = new PMatrix2D(
      v.y * determinant, -v.x * determinant, 0,
-    -u.y * determinant, u.x * determinant, 0
+    -u.y * determinant,  u.x * determinant, 0
   ) 
 
   return invertedBasis;
+}
+
+PMatrix2D scaleMatrix(float sx, float sy){
+  return new PMatrix2D(
+    sx, 0, 0,
+    0, sy, 0
+  );
+} 
+
+PMatrix2D scaleMatrix(float zoom){
+  return scaleMatrix(zoom, zoom);
 }
