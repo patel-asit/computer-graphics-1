@@ -37,7 +37,7 @@ PMatrix2D getOrtho(float left, float right, float bottom, float top) {
 PMatrix2D getCamera(PVector center, PVector up, PVector perp, float zoom) {
   PMatrix2D V, translation;
   
-  V = invertBasis(up, perp);
+  V = invertBasis(perp, up);
   translation = new PMatrix2D(
     1, 0, -center.x,
     0, 1, -center.y

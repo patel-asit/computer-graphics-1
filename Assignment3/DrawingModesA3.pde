@@ -8,25 +8,46 @@ final char KEY_DISPLAY_MODE = 'd';
 
 enum OrthoMode {
   IDENTITY, // straight to viewport with no transformations (Pr, V and M are all the identity)
-    CENTER600, // bottom left is (-300,-300), top right is (300,300), center is (0,0)
-    TOPRIGHT600, // bottom left is (0,0), top right is (600,600)
-    FLIPX, // same as CENTER600 but reflected through y axis (x -> -x)
-    ASPECT // uneven aspect ratio: x is from -300 to 300, y is from -100 to 100
+  CENTER600, // bottom left is (-300,-300), top right is (300,300), center is (0,0)
+  TOPRIGHT600, // bottom left is (0,0), top right is (600,600)
+  FLIPX, // same as CENTER600 but reflected through y axis (x -> -x)
+  ASPECT // uneven aspect ratio: x is from -300 to 300, y is from -100 to 100
 }
 OrthoMode orthoMode = OrthoMode.IDENTITY;
 
 enum DisplayMode {
   PATTERN, 
-    SCENE,
-    SHAPES
+  SCENE,
+  SHAPES
 }
 DisplayMode testMode = DisplayMode.PATTERN;
 
 void keyPressed() {
-  // implement responses to hotkeys here
-  // code from the Assignment 1 template may be helpful
+  //implement responses to hotkeys here
+  if (key == KEY_ORTHO_MODE) {
+    orthoMode = OrthoMode.values()[(orthoMode.ordinal() + 1) % OrthoMode.values().length];
+  }
+  //change testMode with 'd' key
+  if (key == KEY_DISPLAY_MODE) {
+    testMode = DisplayMode.values()[(testMode.ordinal() + 1) % DisplayMode.values().length];
+  }
+  //change zoom
+  if (key == KEY_ZOOM_IN) {
+    globalZoom *= ZOOM_FACTOR;
+  }
+  if (key == KEY_ZOOM_OUT) {
+    globalZoom *= ZOOM_FACTOR;
+  }
+  printSettings();
 }
 
+
+void printSettings() {
+  String settings = "";
+  settings += "OrthoMode: " + orthoMode + "\n";
+  settings += "DisplayMode: " + testMode + "\n";
+  println(settings);
+}
 
 // don't change anything below here
 

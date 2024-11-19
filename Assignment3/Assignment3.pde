@@ -14,7 +14,8 @@ final color BLACK = color(0);
 PVector cameraCenter;
 PVector cameraUp;
 PVector cameraPerp;
-float zoom;
+float globalZoom, zoomFactor = 1.5;
+final float ZOOM_FACTOR = 1.5;
 
 float orthoLeft;
 float orthoRight;
@@ -30,7 +31,7 @@ void setup() {
   cameraCenter = new PVector(0,0);
   cameraUp = new PVector(0,1);
   cameraPerp = new PVector(1,0);
-  zoom = 1;
+  globalZoom = 1;
 
   orthoLeft = 0;
   orthoRight = width;
@@ -41,7 +42,36 @@ void setup() {
 void draw() {
   background(BLACK);
 
-  System.out.println(getViewPort());
+  // System.out.println(getViewPort());
+  switch (orthoMode) {
+  case IDENTITY:
+    M.reset();
+    V.reset();
+    Pr.reset();
+    Vp = getViewPort();
+    break;
+  case CENTER600:
+    Pr = getOrtho(-300, 300, -300, 300);
+    break;
+  case TOPRIGHT600:
+    Pr = getOrtho(0, 600, 0, 600);
+    break;
+  case FLIPX:
+    cameraPerp = new PVector(-1,0);
+    M.reset();
+    V.reset();
+    Pr.reset();
+    Vp = getViewPort();
+    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
+    break;
+  case ASPECT:
+    M.reset();
+    V.reset();
+    Pr.reset();
+    Vp = getViewPort();
+    Pr = getOrtho(-300, 300, -100, 100);
+    break;
+  }
 
   switch (testMode) {
   case PATTERN:
