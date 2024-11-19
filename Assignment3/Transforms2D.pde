@@ -1,47 +1,51 @@
 // construct viewport matrix using width and height of canvas
 PMatrix2D getViewPort() {
-  PMatrix2D invertedB, translation;
+  PMatrix2D Vp, translation;
   PVector origin = new PVector(-1, 1);
   PVector u = new PVector(2.0f/width, 0);
   PVector v = new PVector(0, -2.0f/height);
 
-  invertedB = invertBasis(u, v);
+  Vp = invertBasis(u, v);
   translation = new PMatrix2D(
     1, 0, -origin.x,
     0, 1, -origin.y
   );
 
-  return invertedB.apply(translation);
+  Vp.apply(translation);
+  return Vp;
 }
 
 // construct projection matrix using 2D boundaries
 PMatrix2D getOrtho(float left, float right, float bottom, float top) {
-  PMatrix2D invertedB, translation;
+  PMatrix2D Pr, translation;
   PVector origin = new PVector((left+right)/2, (top+bottom)/2);
   PVector u = new PVector((right-left)/2, 0);
   PVector v = new PVector(0, (top-bottom)/2);
   
-  invertedB = invertBasis(u, v);
+  Pr = invertBasis(u, v);
   translation = new PMatrix2D(
     1, 0, -origin.x,
     0, 1, -origin.y
   );
 
-  return invertedB.apply(translation);
+  Pr.apply(translation);
+
+  return Pr;
 }
 
 // construct camera matrix using camera position, up vector, and zoom setting
 PMatrix2D getCamera(PVector center, PVector up, PVector perp, float zoom) {
+  PMatrix2D V, translation;
   
-  PMatrix2D invertedB, translation;
-  
-  invertedB = invertBasis(up, perp);
+  V = invertBasis(up, perp);
   translation = new PMatrix2D(
     1, 0, -center.x,
     0, 1, -center.y
   );
 
-  return scaleMatrix(zoom).apply(invertedB.apply(translation));
+  V.apply(translation);
+  V.preApply(scaleMatrix(zoom));
+  return V;
 }
 
 /*
@@ -77,8 +81,7 @@ void myVertex(float x, float y) {
   // apply transformations here
   PVector point = new PVector(x, y);
   
-  PMatrix2D transMatrix = null;
-
+  PMatrix2D transMatrix = Vp.apply(Pr.apply(V.apply(M)));
 
   point = transMatrix.mult(point, null).
   // this is the only place in your program where you are allowed
@@ -97,7 +100,7 @@ PMatrix2D invertBasis(PVector u, PVector v){
   PMatrix2D invertedBasis = new PMatrix2D(
      v.y * determinant, -v.x * determinant, 0,
     -u.y * determinant,  u.x * determinant, 0
-  ) 
+  );
 
   return invertedBasis;
 }
