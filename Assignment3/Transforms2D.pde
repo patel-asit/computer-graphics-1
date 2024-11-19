@@ -24,7 +24,7 @@ PMatrix2D getOrtho(float left, float right, float bottom, float top) {
   invertedB = invertBasis(u, v);
   translation = new PMatrix2D(
     1, 0, -origin.x,
-    0, 1, -origin.y;
+    0, 1, -origin.y
   );
 
   return invertedB.apply(translation);
@@ -38,7 +38,7 @@ PMatrix2D getCamera(PVector center, PVector up, PVector perp, float zoom) {
   invertedB = invertBasis(up, perp);
   translation = new PMatrix2D(
     1, 0, -center.x,
-    0, 1, -center.y;
+    0, 1, -center.y
   );
 
   return scaleMatrix(zoom).apply(invertedB.apply(translation));
