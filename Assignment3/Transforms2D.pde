@@ -80,10 +80,15 @@ Receives a point in object space and applies the complete transformation
 void myVertex(float x, float y) {
   // apply transformations here
   PVector point = new PVector(x, y);
-  
-  PMatrix2D transMatrix = Vp.apply(Pr.apply(V.apply(M)));
 
-  point = transMatrix.mult(point, null).
+  PMatrix2D transMatrix = new PMatrix2D();
+  
+  transMatrix.apply(Vp);
+  transMatrix.apply(Pr);
+  transMatrix.apply(V);
+  transMatrix.apply(M);
+  
+  point = transMatrix.mult(point, null);
   // this is the only place in your program where you are allowed
   // to use the vertex command
   vertex(point.x, point.y);
