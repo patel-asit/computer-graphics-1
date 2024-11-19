@@ -14,8 +14,10 @@ final color BLACK = color(0);
 PVector cameraCenter;
 PVector cameraUp;
 PVector cameraPerp;
-float globalZoom, zoomFactor = 1.5;
-final float ZOOM_FACTOR = 1.5;
+float globalZoom;
+final float ZOOM_IN_FACTOR = 1.2;
+final float ZOOM_OUT_FACTOR = 0.8;
+
 
 float orthoLeft;
 float orthoRight;
@@ -47,28 +49,27 @@ void draw() {
   case IDENTITY:
     M.reset();
     V.reset();
-    Pr.reset();
+    Pr.reset(); 
+    resetCameraAngles();
+    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Vp = getViewPort();
     break;
   case CENTER600:
+    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Pr = getOrtho(-300, 300, -300, 300);
     break;
   case TOPRIGHT600:
+    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Pr = getOrtho(0, 600, 0, 600);
     break;
   case FLIPX:
-    cameraPerp = new PVector(-1,0);
-    M.reset();
-    V.reset();
     Pr.reset();
-    Vp = getViewPort();
+    cameraPerp = new PVector(-1,0);
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     break;
   case ASPECT:
-    M.reset();
-    V.reset();
-    Pr.reset();
-    Vp = getViewPort();
+    resetCameraAngles();
+    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Pr = getOrtho(-300, 300, -100, 100);
     break;
   }
@@ -105,4 +106,9 @@ void mouseDragged() {
   float yMove = mouseY - pmouseY;
 
   // implement click-and-drag panning here
+}
+
+void resetCameraAngles(){
+  cameraUp = new PVector(0,1);
+  cameraPerp = new PVector(1,0);
 }

@@ -33,10 +33,10 @@ void keyPressed() {
   }
   //change zoom
   if (key == KEY_ZOOM_IN) {
-    globalZoom *= ZOOM_FACTOR;
+    globalZoom *= ZOOM_IN_FACTOR;
   }
   if (key == KEY_ZOOM_OUT) {
-    globalZoom *= ZOOM_FACTOR;
+    globalZoom *= ZOOM_OUT_FACTOR;
   }
   printSettings();
 }
