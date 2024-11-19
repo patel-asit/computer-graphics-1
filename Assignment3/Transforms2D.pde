@@ -8,7 +8,7 @@ PMatrix2D getViewPort() {
   invertedB = invertBasis(u, v);
   translation = new PMatrix2D(
     1, 0, -origin.x,
-    0, 1, -origin.y;
+    0, 1, -origin.y
   );
 
   return invertedB.apply(translation);
@@ -75,10 +75,15 @@ Receives a point in object space and applies the complete transformation
  */
 void myVertex(float x, float y) {
   // apply transformations here
+  PVector point = new PVector(x, y);
+  
+  PMatrix2D transMatrix = null;
 
+
+  point = transMatrix.mult(point, null).
   // this is the only place in your program where you are allowed
   // to use the vertex command
-  vertex(x, y);
+  vertex(point.x, point.y);
 }
 
 // overload for convenience
