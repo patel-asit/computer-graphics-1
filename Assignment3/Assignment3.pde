@@ -35,32 +35,31 @@ void setup() {
   cameraPerp = new PVector(1,0);
   globalZoom = 1;
 
-  orthoLeft = 0;
-  orthoRight = width;
-  orthoTop = 0;
-  orthoBottom = height;
+  setOrtho(0, width, 0, height);
 }
 
 void draw() {
   background(BLACK);
-
+  mouseDragged();
   // System.out.println(getViewPort());
   switch (orthoMode) {
   case IDENTITY:
     M.reset();
     V.reset();
     Pr.reset(); 
-    resetCameraAngles();
-    V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
+    // resetCameraAngles();
+    // V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Vp = getViewPort();
     break;
   case CENTER600:
+    setOrtho(-300, 300, -300, 300);
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
-    Pr = getOrtho(-300, 300, -300, 300);
+    Pr = getOrtho(orthoLeft, orthoRight, orthoBottom, orthoTop);
     break;
   case TOPRIGHT600:
+    setOrtho(0, 600, 0, 600);
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
-    Pr = getOrtho(0, 600, 0, 600);
+    Pr = getOrtho(orthoLeft, orthoRight, orthoBottom, orthoTop);
     break;
   case FLIPX:
     Pr.reset();
@@ -68,9 +67,9 @@ void draw() {
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     break;
   case ASPECT:
-    resetCameraAngles();
+    setOrtho(-300, 300, -100, 100);
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
-    Pr = getOrtho(-300, 300, -100, 100);
+    Pr = getOrtho(orthoLeft, orthoRight, orthoBottom, orthoTop);
     break;
   }
 
@@ -104,11 +103,23 @@ void mouseDragged() {
    */
   float xMove = mouseX - pmouseX;
   float yMove = mouseY - pmouseY;
-
+  float denominatorX = globalZoom*2*width/(orthoRight-orthoLeft);
+  float denominatorY = globalZoom*2*height/(orthoTop-orthoBottom);
   // implement click-and-drag panning here
+  if(mousePressed){
+      cameraCenter = new PVector(cameraCenter.x - xMove/denominatorX, cameraCenter.y + yMove/denominatorY);
+  }
 }
 
 void resetCameraAngles(){
   cameraUp = new PVector(0,1);
   cameraPerp = new PVector(1,0);
+  cameraCenter = new PVector(0,0);
+}
+
+void setOrtho(float left, float right, float bottom, float top){
+  orthoLeft = left;
+  orthoRight = right;
+  orthoBottom = bottom;
+  orthoTop = top;
 }

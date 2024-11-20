@@ -23,13 +23,15 @@ enum DisplayMode {
 DisplayMode testMode = DisplayMode.PATTERN;
 
 void keyPressed() {
-  //implement responses to hotkeys here
+  // change orthoMode with 'o' key
   if (key == KEY_ORTHO_MODE) {
     orthoMode = OrthoMode.values()[(orthoMode.ordinal() + 1) % OrthoMode.values().length];
+    resetCameraAngles();
   }
   //change testMode with 'd' key
   if (key == KEY_DISPLAY_MODE) {
     testMode = DisplayMode.values()[(testMode.ordinal() + 1) % DisplayMode.values().length];
+  
   }
   //change zoom
   if (key == KEY_ZOOM_IN) {
