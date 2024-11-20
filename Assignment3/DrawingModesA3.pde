@@ -24,21 +24,24 @@ DisplayMode testMode = DisplayMode.PATTERN;
 
 void keyPressed() {
   // change orthoMode with 'o' key
-  if (key == KEY_ORTHO_MODE) {
-    orthoMode = OrthoMode.values()[(orthoMode.ordinal() + 1) % OrthoMode.values().length];
-    resetCameraAngles();
-  }
-  //change testMode with 'd' key
-  if (key == KEY_DISPLAY_MODE) {
-    testMode = DisplayMode.values()[(testMode.ordinal() + 1) % DisplayMode.values().length];
-  
-  }
-  //change zoom
-  if (key == KEY_ZOOM_IN) {
-    globalZoom *= ZOOM_IN_FACTOR;
-  }
-  if (key == KEY_ZOOM_OUT) {
-    globalZoom *= ZOOM_OUT_FACTOR;
+  switch(key) {
+    case KEY_ORTHO_MODE:
+      orthoMode = OrthoMode.values()[(orthoMode.ordinal() + 1) % OrthoMode.values().length];
+      resetCameraAngles();
+      break;
+    case KEY_DISPLAY_MODE:
+      testMode = DisplayMode.values()[(testMode.ordinal() + 1) % DisplayMode.values().length];
+      break;
+    case KEY_ZOOM_IN:
+      globalZoom *= ZOOM_IN_FACTOR;
+      break;
+    case KEY_ZOOM_OUT:
+      globalZoom *= ZOOM_OUT_FACTOR;
+      break;
+    case KEY_ROTATE_CCW:
+      break;
+    case KEY_ROTATE_CW:
+      break;
   }
   printSettings();
 }

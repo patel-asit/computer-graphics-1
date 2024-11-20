@@ -47,8 +47,6 @@ void draw() {
     M.reset();
     V.reset();
     Pr.reset(); 
-    // resetCameraAngles();
-    // V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
     Vp = getViewPort();
     break;
   case CENTER600:
@@ -62,9 +60,9 @@ void draw() {
     Pr = getOrtho(orthoLeft, orthoRight, orthoBottom, orthoTop);
     break;
   case FLIPX:
-    Pr.reset();
-    cameraPerp = new PVector(-1,0);
+    setOrtho(300, -300, -300, 300);
     V = getCamera(cameraCenter, cameraUp, cameraPerp, globalZoom);
+    Pr = getOrtho(orthoLeft, orthoRight, orthoBottom, orthoTop);
     break;
   case ASPECT:
     setOrtho(-300, 300, -100, 100);
@@ -103,10 +101,12 @@ void mouseDragged() {
    */
   float xMove = mouseX - pmouseX;
   float yMove = mouseY - pmouseY;
-  float denominatorX = globalZoom*2*width/(orthoRight-orthoLeft);
-  float denominatorY = globalZoom*2*height/(orthoTop-orthoBottom);
+  float denominatorX = globalZoom*2*width/abs(orthoRight-orthoLeft);
+  float denominatorY = globalZoom*2*height/abs(orthoTop-orthoBottom);
   // implement click-and-drag panning here
   if(mousePressed){
+      if(orthoMode == OrthoMode.FLIPX)
+        denominatorX *= -1;
       cameraCenter = new PVector(cameraCenter.x - xMove/denominatorX, cameraCenter.y + yMove/denominatorY);
   }
 }
@@ -115,6 +115,7 @@ void resetCameraAngles(){
   cameraUp = new PVector(0,1);
   cameraPerp = new PVector(1,0);
   cameraCenter = new PVector(0,0);
+  globalZoom = 1;
 }
 
 void setOrtho(float left, float right, float bottom, float top){
