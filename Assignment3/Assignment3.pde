@@ -14,10 +14,10 @@ final color BLACK = color(0);
 PVector cameraCenter;
 PVector cameraUp;
 PVector cameraPerp;
-float globalZoom;
+float globalZoom, globalRotation;
 final float ZOOM_IN_FACTOR = 1.2;
 final float ZOOM_OUT_FACTOR = 0.8;
-
+final float ROTATION_ANGLE = PI/16;
 
 float orthoLeft;
 float orthoRight;
@@ -34,6 +34,7 @@ void setup() {
   cameraUp = new PVector(0,1);
   cameraPerp = new PVector(1,0);
   globalZoom = 1;
+  globalRotation = 0;
 
   setOrtho(0, width, 0, height);
 }
@@ -43,7 +44,7 @@ void draw() {
   mouseDragged();
   // System.out.println(getViewPort());
   switch (orthoMode) {
-  case IDENTITY:
+  case IDENTITY: // no zoom, panning or rotation effects on this mode because Pr, V and M are all the identity
     M.reset();
     V.reset();
     Pr.reset(); 
@@ -101,13 +102,17 @@ void mouseDragged() {
    */
   float xMove = mouseX - pmouseX;
   float yMove = mouseY - pmouseY;
+
   float denominatorX = globalZoom*2*width/abs(orthoRight-orthoLeft);
   float denominatorY = globalZoom*2*height/abs(orthoTop-orthoBottom);
+  PVector mouseMove = new PVector(xMove/denominatorX, yMove/denominatorY);
+  mouseMove.rotate(-globalRotation);
   // implement click-and-drag panning here
   if(mousePressed){
       if(orthoMode == OrthoMode.FLIPX)
-        denominatorX *= -1;
-      cameraCenter = new PVector(cameraCenter.x - xMove/denominatorX, cameraCenter.y + yMove/denominatorY);
+        mouseMove.x *= -1;
+      cameraCenter = new PVector(cameraCenter.x - mouseMove.x, cameraCenter.y + mouseMove.y);
+      // cameraCenter = new PVector(cameraCenter.x - xMove/denominatorX, cameraCenter.y + yMove/denominatorY);
   }
 }
 
@@ -116,6 +121,7 @@ void resetCameraAngles(){
   cameraPerp = new PVector(1,0);
   cameraCenter = new PVector(0,0);
   globalZoom = 1;
+  globalRotation = 0;
 }
 
 void setOrtho(float left, float right, float bottom, float top){

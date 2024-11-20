@@ -6,12 +6,9 @@ PMatrix2D getViewPort() {
   PVector v = new PVector(0, -2.0f/height);
 
   Vp = invertBasis(u, v);
-  translation = new PMatrix2D(
-    1, 0, -origin.x,
-    0, 1, -origin.y
-  );
-
+  translation = translateMatrix(-origin.x, -origin.y);
   Vp.apply(translation);
+
   return Vp;
 }
 
@@ -23,11 +20,7 @@ PMatrix2D getOrtho(float left, float right, float bottom, float top) {
   PVector v = new PVector(0, (top-bottom)/2);
   
   Pr = invertBasis(u, v);
-  translation = new PMatrix2D(
-    1, 0, -origin.x,
-    0, 1, -origin.y
-  );
-
+  translation = translateMatrix(-origin.x, -origin.y);
   Pr.apply(translation);
 
   return Pr;
@@ -38,13 +31,10 @@ PMatrix2D getCamera(PVector center, PVector up, PVector perp, float zoom) {
   PMatrix2D V, translation;
   
   V = invertBasis(perp, up);
-  translation = new PMatrix2D(
-    1, 0, -center.x,
-    0, 1, -center.y
-  );
-
+  translation = translateMatrix(-center.x, -center.y);
   V.apply(translation);
   V.preApply(scaleMatrix(zoom));
+
   return V;
 }
 
@@ -53,9 +43,16 @@ Functions that manipulate the matrix stack
  */
 
 void myPush() {
+  matrixStack.push(M);
 }
 
 void myPop() {
+  // Pop elements from the stack
+  if(!stack.isEmpty()) {
+    M = matrixStack.pop();
+  }else {
+    M = new PMatrix2D; // if i pop too much keep returning identity matrix
+  }
 }
 
 /*
@@ -63,13 +60,19 @@ Functions that update the model matrix
  */
 
 void myScale(float sx, float sy) {
+  M.apply(scaleMatrix(sx, sy););
 }
 
 void myTranslate(float tx, float ty) {
-  
+  M.apply(translateMatrix(tx, ty););
 }
 
 void myRotate(float theta) {
+  PMatrix2D rotateMatrix = new PMatrix2D(
+    cos(theta), -sin(theta), 0,
+    sin(theta), cos(theta), 0
+  );
+  M.apply(rotateMatrix);
 }
 
 /*
@@ -109,6 +112,13 @@ PMatrix2D invertBasis(PVector u, PVector v){
 
   return invertedBasis;
 }
+
+PMatrix2D translateMatrix(float tx, float ty){
+  return new PMatrix2D(
+    1, 0, tx,
+    0, 1, ty
+  );
+} 
 
 PMatrix2D scaleMatrix(float sx, float sy){
   return new PMatrix2D(

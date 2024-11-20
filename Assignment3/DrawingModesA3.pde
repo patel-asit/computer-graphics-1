@@ -39,8 +39,17 @@ void keyPressed() {
       globalZoom *= ZOOM_OUT_FACTOR;
       break;
     case KEY_ROTATE_CCW:
+      globalRotation -= ROTATION_ANGLE;
+      globalRotation %= TWO_PI;
+      println(globalRotation);
+      cameraUp.rotate(globalRotation);
+      cameraPerp.rotate(globalRotation);
       break;
     case KEY_ROTATE_CW:
+      globalRotation += ROTATION_ANGLE;
+      globalRotation %= TWO_PI;
+      cameraUp.rotate(globalRotation);
+      cameraPerp.rotate(globalRotation);
       break;
   }
   printSettings();
