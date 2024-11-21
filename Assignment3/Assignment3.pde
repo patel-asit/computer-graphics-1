@@ -83,100 +83,64 @@ void draw() {
 
 // feel free to add a new file for drawing your scene
 void drawScene() {
-  // drawRing();
+  // drawSparkle();
+  diamondBottom();
   diamondTop();
   drawSparkle();
-  // myPush();
-  // stroke(color(1,1,1));
-  // strokeWeight(4);
-  // beginShape(LINES);
-  //   myVertex(0, 0);
-  //   myVertex(10,10);
-  // endShape(LINES);
-  // myPop();
 }
 
-void drawRing(){
-  myPush();
-  //navy blue stroke color
-  stroke(0, 0, 0.5);  //navy blue color
-  strokeWeight(2);
-  fill(0,1,1);        //teal color
-  beginShape(TRIANGLE_FAN);
-    myVertex(57.5, 50);
-    myVertex(57.5, 15);
-    myVertex(92, 50);
-    myVertex(57.5, 85);
-    myVertex(22, 50);
-    myVertex(57.5, 15);
-  endShape();
-  myPop();
-}
-
-// void drawDiamond(){
-//   myPush();
-//   stroke(color(1,1,1));
-//   strokeWeight(4);
-//   beginShape(LINES);
-//     myVertex(0, 0);
-//     myVertex(10,10);
-//   endShape(LINES);
-//   myPop();
-// }
-
-void drawBand(){
-
-}
 
 void drawSparkle(){
   //draw a shiny sparkly star in golden color
-  myPush();
   fill(1,1,0);  //golden color
   stroke(1,1,0);  //golden color
-  strokeWeight(1);
+  strokeWeight(5);
   //draw a 6 pointed star
-  beginShape();
-    myVertex(50, 50);
-    myVertex(55, 55);
-    myVertex(60, 50);
-    myVertex(55, 45);
-    myVertex(50, 50);
+  beginShape(LINES);
+    myVertex(-1, 0);
+    myVertex(1, 0);   //horizontal line
+    myVertex(0, -1);
+    myVertex(0, 1);   //vertical line
+    myVertex(-0.67, -0.67);
+    myVertex(0.67, 0.67);  //right diagonal line
+    myVertex(-0.67, 0.67);
+    myVertex(0.67, -0.67);  //left diagonal line
   endShape();
-  myPop();
-}
-
-void drawDiamond(){
-  //draw a complex diamong
-  myPush();
-  fill(1,1,1);  //white color
-  stroke(1,1,1);  //white color
-  strokeWeight(1);
-  beginShape();
-    myVertex(50, 50);
-    myVertex(55, 55);
-    myVertex(60, 50);
-    myVertex(55, 45);
-    myVertex(50, 50);
-  endShape();
-    myRotate(PI);
-  myPop();  
 }
 
 void diamondTop(){
   myPush();
   //navy blue stroke color
-  stroke(0, 0, 0.5);  //navy blue color
+  stroke(1, 1, 1);  //white color borders
   strokeWeight(2);
   fill(0,1,1);        //teal color
   beginShape(TRIANGLE_STRIP);
-    myVertex(30, 75);
-    myVertex(40, 20);
-    myVertex(50, 75);
-    myVertex(60, 20);
-    myVertex(70, 75);
-    myVertex(80, 20);
-    myVertex(90, 75);
+    myVertex(-1, 0);
+    myVertex(-0.67, 0.67);
+    myVertex(-0.33, 0);
+    myVertex(0, 0.67);
+    myVertex(0.33, 0);
+    myVertex(0.67, 0.67);
+    myVertex(1, 0);
   endShape();
+  myPop();
+}
+
+void diamondBottom(){
+  myPush();
+  //navy blue stroke color
+  stroke(1, 1, 1);  //white color borders
+  strokeWeight(2);
+  fill(0,1,1);        //teal color
+  beginShape(TRIANGLE_STRIP);
+    myVertex(-1, 0);
+    myVertex(0, -1);
+    myVertex(-0.33, 0);
+    myVertex(0, -1);
+    myVertex(1, 0);
+    myVertex(0.33, 0);
+  endShape();
+  myPop();
 }
 
 
