@@ -17,7 +17,7 @@ PVector cameraPerp;
 float globalZoom, globalRotation;
 final float ZOOM_IN_FACTOR = 1.2;
 final float ZOOM_OUT_FACTOR = 0.8;
-final float ROTATION_ANGLE = 0.01;
+final float ROTATION_ANGLE = PI/32;
 
 float orthoLeft;
 float orthoRight;

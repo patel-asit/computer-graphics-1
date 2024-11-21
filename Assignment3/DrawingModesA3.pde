@@ -41,13 +41,13 @@ void keyPressed() {
       break;
     case KEY_ROTATE_CCW:
       globalRotation -= ROTATION_ANGLE;
-      globalRotation = (globalRotation % TWO_PI + TWO_PI) % TWO_PI;      println(globalRotation);
+      globalRotation = -(abs(globalRotation)%TWO_PI); // handle java's -ve modulus, make sure angle is within 0 to -2PI
       cameraUp.rotate(globalRotation);
       cameraPerp.rotate(globalRotation);
       break;
     case KEY_ROTATE_CW:
       globalRotation += ROTATION_ANGLE;
-      globalRotation %= TWO_PI;
+      globalRotation %= TWO_PI; // make sure angle is within 0 to 2PI
       cameraUp.rotate(globalRotation);
       cameraPerp.rotate(globalRotation);
       break;
