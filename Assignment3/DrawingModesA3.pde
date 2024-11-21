@@ -40,16 +40,12 @@ void keyPressed() {
       globalZoom *= ZOOM_OUT_FACTOR;
       break;
     case KEY_ROTATE_CCW:
-      globalRotation -= ROTATION_ANGLE;
-      globalRotation = -(abs(globalRotation)%TWO_PI); // handle java's -ve modulus, make sure angle is within 0 to -2PI
-      cameraUp.rotate(globalRotation);
-      cameraPerp.rotate(globalRotation);
+      cameraUp.rotate(-ROTATION_ANGLE);
+      cameraPerp.rotate(-ROTATION_ANGLE);
       break;
     case KEY_ROTATE_CW:
-      globalRotation += ROTATION_ANGLE;
-      globalRotation %= TWO_PI; // make sure angle is within 0 to 2PI
-      cameraUp.rotate(globalRotation);
-      cameraPerp.rotate(globalRotation);
+      cameraUp.rotate(ROTATION_ANGLE);
+      cameraPerp.rotate(ROTATION_ANGLE);
       break;
   }
   printSettings();

@@ -14,7 +14,7 @@ final color BLACK = color(0);
 PVector cameraCenter;
 PVector cameraUp;
 PVector cameraPerp;
-float globalZoom, globalRotation;
+float globalZoom;
 final float ZOOM_IN_FACTOR = 1.2;
 final float ZOOM_OUT_FACTOR = 0.8;
 final float ROTATION_ANGLE = PI/32;
@@ -83,19 +83,67 @@ void draw() {
 
 // feel free to add a new file for drawing your scene
 void drawScene() {
-  // drawSparkle();
-  diamondBottom();
-  diamondTop();
-  drawSparkle();
+  //draws 5 diamonds
+  myPush();
+    myTranslate(-200, 0);
+    myRotate(PI/4);
+    myScale(50,50);
+    drawDiamond(0, 1, 1); //cyan diamond  
+  myPop();
+
+  myPush();
+    myTranslate(250, 100);
+    myRotate(PI/16);
+    myScale(80,80);
+    drawDiamond(0.31, 0.78, 0.47); //dark emerald green diamond
+  myPop();
+
+  myPush();
+    myTranslate(-100, -200);
+    myRotate(PI/8);
+    myScale(80,40);
+    drawDiamond(1, 0.5, 0); //orange diamond
+  myPop();
+
+  myPush();
+    myTranslate(0, 200);
+    myRotate(PI/2);
+    myScale(120,120);
+    drawDiamond(0.5, 0.2, 0.8); // purple diamond
+  myPop();
+
+  myPush();
+    myTranslate(200, -100);
+    myRotate(-PI/3);
+    myScale(70,100);
+    drawDiamond(1, 0, 1); //magenta diamond
+  myPop();
+
 }
 
+void drawDiamond(float r, float g, float b){
+  myPush();
+    diamondTop(r,g,b);
+    diamondBottom(r,g,b);
+    drawRandomSparkles();
+  myPop();
+}
+
+void drawRandomSparkles(){
+  for(int i = 0; i < 3; i++){
+    myPush();
+      myTranslate(random(-1, 1), random(0, 1));
+      myScale(random(0.1, 0.3), random(0.1, 0.3));
+      drawSparkle();
+    myPop();
+  }
+}
 
 void drawSparkle(){
   //draw a shiny sparkly star in golden color
   fill(1,1,0);  //golden color
   stroke(1,1,0);  //golden color
   strokeWeight(5);
-  //draw a 6 pointed star
   beginShape(LINES);
     myVertex(-1, 0);
     myVertex(1, 0);   //horizontal line
@@ -108,12 +156,11 @@ void drawSparkle(){
   endShape();
 }
 
-void diamondTop(){
-  myPush();
+void diamondTop(float r, float g, float b){
   //navy blue stroke color
   stroke(1, 1, 1);  //white color borders
   strokeWeight(2);
-  fill(0,1,1);        //teal color
+  fill(r,g,b);        //teal color
   beginShape(TRIANGLE_STRIP);
     myVertex(-1, 0);
     myVertex(-0.67, 0.67);
@@ -123,15 +170,13 @@ void diamondTop(){
     myVertex(0.67, 0.67);
     myVertex(1, 0);
   endShape();
-  myPop();
 }
 
-void diamondBottom(){
-  myPush();
+void diamondBottom(float r, float g, float b){
   //navy blue stroke color
   stroke(1, 1, 1);  //white color borders
   strokeWeight(2);
-  fill(0,1,1);        //teal color
+  fill(r,g,b);
   beginShape(TRIANGLE_STRIP);
     myVertex(-1, 0);
     myVertex(0, -1);
@@ -140,7 +185,6 @@ void diamondBottom(){
     myVertex(1, 0);
     myVertex(0.33, 0);
   endShape();
-  myPop();
 }
 
 
@@ -166,11 +210,10 @@ void mouseDragged() {
 }
 
 void resetCameraAngles(){
-  cameraUp = new PVector(0,1);
+  cameraUp = new PVector(0,1);      // reset rotation angles
   cameraPerp = new PVector(1,0);
-  cameraCenter = new PVector(0,0);
-  globalZoom = 1;
-  globalRotation = 0;
+  cameraCenter = new PVector(0,0);  // reset panning position
+  globalZoom = 1;                   // reset zoom
 }
 
 void resetOrtho(){
