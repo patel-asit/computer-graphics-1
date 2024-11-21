@@ -28,6 +28,7 @@ void keyPressed() {
     case KEY_ORTHO_MODE:
       orthoMode = OrthoMode.values()[(orthoMode.ordinal() + 1) % OrthoMode.values().length];
       resetCameraAngles();
+      resetOrtho();
       break;
     case KEY_DISPLAY_MODE:
       testMode = DisplayMode.values()[(testMode.ordinal() + 1) % DisplayMode.values().length];
@@ -40,8 +41,7 @@ void keyPressed() {
       break;
     case KEY_ROTATE_CCW:
       globalRotation -= ROTATION_ANGLE;
-      globalRotation %= TWO_PI;
-      println(globalRotation);
+      globalRotation = (globalRotation % TWO_PI + TWO_PI) % TWO_PI;      println(globalRotation);
       cameraUp.rotate(globalRotation);
       cameraPerp.rotate(globalRotation);
       break;

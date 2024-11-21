@@ -43,15 +43,15 @@ Functions that manipulate the matrix stack
  */
 
 void myPush() {
-  matrixStack.push(M);
+  matrixStack.push(M.get());
 }
 
 void myPop() {
   // Pop elements from the stack
-  if(!stack.isEmpty()) {
+  if(!matrixStack.isEmpty()) {
     M = matrixStack.pop();
   }else {
-    M = new PMatrix2D; // if i pop too much keep returning identity matrix
+    M = new PMatrix2D(); // if i pop too much keep returning identity matrix
   }
 }
 
@@ -60,11 +60,11 @@ Functions that update the model matrix
  */
 
 void myScale(float sx, float sy) {
-  M.apply(scaleMatrix(sx, sy););
+  M.apply(scaleMatrix(sx, sy));
 }
 
 void myTranslate(float tx, float ty) {
-  M.apply(translateMatrix(tx, ty););
+  M.apply(translateMatrix(tx, ty));
 }
 
 void myRotate(float theta) {
