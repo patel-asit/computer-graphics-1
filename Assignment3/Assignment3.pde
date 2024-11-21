@@ -134,15 +134,15 @@ void drawRandomSparkles(){
     myPush();
       myTranslate(random(-1, 1), random(0, 1));
       myScale(random(0.1, 0.3), random(0.1, 0.3));
-      drawSparkle();
+      sparkle();
     myPop();
   }
 }
 
-void drawSparkle(){
+void sparkle(){
   //draw a shiny sparkly star in golden color
-  fill(1,1,0);  //golden color
-  stroke(1,1,0);  //golden color
+  fill(1,1,0);          //golden color
+  stroke(1,1,0);        //golden color
   strokeWeight(5);
   beginShape(LINES);
     myVertex(-1, 0);
@@ -160,7 +160,7 @@ void diamondTop(float r, float g, float b){
   //navy blue stroke color
   stroke(1, 1, 1);  //white color borders
   strokeWeight(2);
-  fill(r,g,b);        //teal color
+  fill(r,g,b);
   beginShape(TRIANGLE_STRIP);
     myVertex(-1, 0);
     myVertex(-0.67, 0.67);
@@ -189,23 +189,17 @@ void diamondBottom(float r, float g, float b){
 
 
 void mouseDragged() {
-  /*
-   how much the mouse has moved between this frame and the previous one,
-   measured in viewport coordinates - you will have to do further
-   calculations with these numbers
-   */
   float xMove = mouseX - pmouseX;
   float yMove = mouseY - pmouseY;
 
   float denominatorX = globalZoom*2*width/abs(orthoRight-orthoLeft);
   float denominatorY = globalZoom*2*height/abs(orthoTop-orthoBottom);
 
-  // implement click-and-drag panning here
+  // click-and-drag panning
   if(mousePressed){
       if(orthoMode == OrthoMode.FLIPX)
         xMove *= -1;
       cameraCenter = new PVector(cameraCenter.x - xMove*cameraPerp.x/denominatorX, cameraCenter.y + yMove*cameraUp.y/denominatorY);
-      // System.out.println("Camera perp" + cameraPerp.x + ", " + cameraPerp.y);
   }
 }
 
