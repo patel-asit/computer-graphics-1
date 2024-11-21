@@ -68,11 +68,7 @@ void myTranslate(float tx, float ty) {
 }
 
 void myRotate(float theta) {
-  PMatrix2D rotateMatrix = new PMatrix2D(
-    cos(theta), -sin(theta), 0,
-    sin(theta), cos(theta), 0
-  );
-  M.apply(rotateMatrix);
+  M.apply(rotateMatrix(theta));
 }
 
 /*
@@ -102,6 +98,10 @@ void myVertex(PVector vertex) {
   myVertex(vertex.x, vertex.y);
 }
 
+/**
+ * Helper Methods
+ */
+
 PMatrix2D invertBasis(PVector u, PVector v){
   float determinant = 1/(u.x*v.y - v.x*u.y);
   
@@ -113,6 +113,12 @@ PMatrix2D invertBasis(PVector u, PVector v){
   return invertedBasis;
 }
 
+PMatrix2D rotateMatrix(float theta){
+  return new PMatrix2D(
+    cos(theta), -sin(theta), 0,
+    sin(theta), cos(theta), 0
+  );
+}
 PMatrix2D translateMatrix(float tx, float ty){
   return new PMatrix2D(
     1, 0, tx,
