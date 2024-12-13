@@ -14,6 +14,10 @@ class Enemy extends Particle {
         currX = originX;
         currY = originY;
 
+        if(hardMode){
+            speed = 500;
+        }
+
         radius = sqrt(sq(RECT_SIZE/2) + sq(RECT_SIZE/2));
         randomizeDest();
     }
