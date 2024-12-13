@@ -9,7 +9,7 @@
 
 class Player extends Particle {
   float originX, originY;
-  float playerX, playerY;
+  float currX, currY;
   final float RECT_WIDTH = 200;
   final float RECT_HEIGHT = 200;
 
@@ -20,8 +20,8 @@ class Player extends Particle {
 
   Player(float originX, float originY) {
     super();
-    playerX = originX;
-    playerY = originY;
+    currX = originX;
+    currY = originY;
 
     //for drifting back to center
     this.originX = originX;
@@ -37,25 +37,25 @@ class Player extends Particle {
     fill(color(255, 0, 0));
     stroke(color(0, 0, 0));
     beginShape();
-      vertex(playerX, playerY, GROUND);
-      vertex(playerX+RECT_WIDTH, playerY, GROUND);
-      vertex(playerX+RECT_WIDTH, playerY+RECT_HEIGHT, GROUND);
-      vertex(playerX, playerY+RECT_HEIGHT, GROUND); 
+      vertex(currX, currY, GROUND);
+      vertex(currX+RECT_WIDTH, currY, GROUND);
+      vertex(currX+RECT_WIDTH, currY+RECT_HEIGHT, GROUND);
+      vertex(currX, currY+RECT_HEIGHT, GROUND); 
     endShape();
   }
 
   void move(){
     if (moveLeft) {
-      playerX = constrain(playerX-moveSpeed, LEFT, RIGHT);
+      currX = constrain(currX-moveSpeed, LEFT, RIGHT);
     }
     if (moveRight) {
-      playerX = constrain(playerX+moveSpeed, LEFT, RIGHT-RECT_WIDTH);
+      currX = constrain(currX+moveSpeed, LEFT, RIGHT-RECT_WIDTH);
     }
     if (moveUp) {
-      playerY = constrain(playerY+moveSpeed, BOTTOM, TOP-RECT_HEIGHT);
+      currY = constrain(currY+moveSpeed, BOTTOM, TOP-RECT_HEIGHT);
     }
     if (moveDown) {
-      playerY = constrain(playerY-moveSpeed, BOTTOM, TOP);
+      currY = constrain(currY-moveSpeed, BOTTOM, TOP);
     }
     if(!moveLeft && !moveRight && !moveUp && !moveDown){
       driftBack();
@@ -64,14 +64,18 @@ class Player extends Particle {
 
   void driftBack(){
     //drift the player back to origin using the simplest lerp step
-    playerX = lerp(playerX, originX, driftSpeed);
-    playerY = lerp(playerY, originY, driftSpeed);
+    currX = lerp(currX, originX, driftSpeed);
+    currY = lerp(currY, originY, driftSpeed);
   }
 
   float getX(){
-    return playerX+RECT_WIDTH/2;
+    return currX+RECT_WIDTH/2;
   } 
   float getY(){
-    return playerY+RECT_HEIGHT;
+    return currY+RECT_HEIGHT;
+  }
+
+  void setBoundingBox(){
+    radius = RECT_WIDTH/2;
   }
 }

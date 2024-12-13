@@ -3,14 +3,17 @@ class World{
     float PLAYER_ORIGIN_X = (LEFT+RIGHT)/2;
     float PLAYER_ORIGIN_Y = BOTTOM;
 
-    Player player = new Player(PLAYER_ORIGIN_X, PLAYER_ORIGIN_Y);
-    ArrayList<Particle> bullets = new ArrayList<Particle>();
-
-    ArrayList<Particle> toRemove = new ArrayList<Particle>();
-    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    Player player;
+    ArrayList<Particle> bullets;
+    ArrayList<Particle> toRemove;
+    ArrayList<Enemy> enemies;
 
     World(){
         //add enemies every 2 seconds
+        player = new Player(PLAYER_ORIGIN_X, PLAYER_ORIGIN_Y);
+        bullets = new ArrayList<Particle>();
+        enemies = new ArrayList<Enemy>();
+        toRemove = new ArrayList<Particle>();
         addEnemy();
     }
 
@@ -44,15 +47,19 @@ class World{
         endShape(CLOSE);
     }
 
-    void addBullet(){
-        bullets.add(new Bullet(player.getX(), player.getY(), new PVector(0, 1)));
+    void addPlayerBullet(){
+        addBullet(player.getX(), player.getY(), new PVector(0, 1), true);
     }
 
-    //used for enemy bullet
-    void addBullet(float x, float y){
+    void addEnemyBullet(float x, float y){
         PVector direction = new PVector(player.getX() - x, player.getY() - y);
         direction.normalize();
-        bullets.add(new Bullet(x, y, direction));
+        addBullet(x, y, direction, false);
+    }
+
+    //adds the bullet in world
+    void addBullet(float x, float y, PVector direction, boolean playerBullet){
+        bullets.add(new Bullet(x, y, direction, false));
     }
     
     //randomly adds enemy on top half of screen

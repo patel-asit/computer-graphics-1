@@ -5,7 +5,6 @@ class Enemy extends Particle {
     float FRAME_RATE = 60;
 
     float dist, numSteps, stepCount;
-    float currX, currY;
     float destX, destY;
     float originX, originY;
     
@@ -42,7 +41,7 @@ class Enemy extends Particle {
 
     void shootBullet(){
         //add bullet to world
-        world.addBullet(currX, currY);
+        world.addEnemyBullet(currX, currY);
         // bullets.add(new Bullet(currX, currY, new PVector(0, 1)));
     }
     
@@ -73,4 +72,8 @@ class Enemy extends Particle {
       vertex(currX, currY+RECT_SIZE, GROUND); 
     endShape();
   }
+
+    void setBoundingBox(){
+        radius = RECT_SIZE/2;
+    }
 }
