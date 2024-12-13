@@ -29,6 +29,8 @@ void setup() {
   size(600, 600);  // don't change, and don't use the P3D renderer
   colorMode(RGB, 1.0f);
 
+  generateStarVertices();   // for Part 4-FlyingShapes of the assignment
+
   // put additional setup here
   resetCameraAngles();
   resetOrtho();
@@ -75,8 +77,12 @@ void draw() {
     break;
     
   case SHAPES:
-    moveShapes();
-    drawShapes();
+    M.reset();
+    V.reset();
+    Pr.reset(); 
+    Vp = getViewPort();
+    // moveShapes();
+    // drawShapes();
     break;
   }
 }
@@ -118,7 +124,6 @@ void drawScene() {
     myScale(70,100);
     drawDiamond(1, 0, 1); //magenta diamond
   myPop();
-
 }
 
 void mouseDragged() {

@@ -61,3 +61,18 @@ void diamondBottom(float r, float g, float b){
     myVertex(0.33, 0);
   endShape();
 }
+
+// Used for Part 4-FlyingShapes of the assignment
+void star(float r, float g, float b){
+  fill(r,g,b);
+  beginShape();
+    myVertex(0, -1);
+    myVertex(0.3, -0.3);
+    myVertex(1, 0);
+    myVertex(0.3, 0.3);
+    myVertex(0, 1);
+    myVertex(-0.3, 0.3);
+    myVertex(-1, 0);
+    myVertex(-0.3, -0.3);
+  endShape();
+}
