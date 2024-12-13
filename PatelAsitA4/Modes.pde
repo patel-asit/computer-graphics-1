@@ -13,7 +13,34 @@ boolean doTextures = false;
 boolean doCollision = false;
 
 void keyPressed() {
+    if (key == KEY_LEFT) {
+        moveLeft = true;
+    }
+    if (key == KEY_RIGHT) {
+        moveRight = true;
+    }
+    if (key == KEY_UP) {
+        moveUp = true;
+    }
+    if (key == KEY_DOWN) {
+        moveDown = true;
+    }
+    if(key == KEY_SHOOT){
+        addBullet();
+    }
 }
 
 void keyReleased() {
+    if (key == KEY_LEFT) {
+        moveLeft = false;
+    }
+    if (key == KEY_RIGHT) {
+        moveRight = false;
+    }
+    if (key == KEY_UP) {
+        moveUp = false;
+    }
+    if (key == KEY_DOWN) {
+        moveDown = false;
+    }
 }
