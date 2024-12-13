@@ -8,13 +8,15 @@
   boolean playerShoot = false;
 
 class Player extends Particle {
-
   float originX, originY;
   float playerX, playerY;
   final float RECT_WIDTH = 200;
   final float RECT_HEIGHT = 200;
 
-  float speed = 10;
+  float moveSpeed = 10;
+  
+  //0.005 is a magic number because the players drift moveSpeed felt right when running 
+  float driftSpeed = 0.005;
 
   Player(float originX, float originY) {
     super();
@@ -22,8 +24,8 @@ class Player extends Particle {
     playerY = originY;
 
     //for drifting back to center
-    originX = originX;
-    originY = originY;
+    this.originX = originX;
+    this.originY = originY;
   }
 
   void draw() {
@@ -44,21 +46,26 @@ class Player extends Particle {
 
   void move(){
     if (moveLeft) {
-      playerX = constrain(playerX-speed, LEFT, RIGHT);
+      playerX = constrain(playerX-moveSpeed, LEFT, RIGHT);
     }
     if (moveRight) {
-      playerX = constrain(playerX+speed, LEFT, RIGHT-RECT_WIDTH);
+      playerX = constrain(playerX+moveSpeed, LEFT, RIGHT-RECT_WIDTH);
     }
     if (moveUp) {
-      playerY = constrain(playerY+speed, BOTTOM, TOP-RECT_HEIGHT);
+      playerY = constrain(playerY+moveSpeed, BOTTOM, TOP-RECT_HEIGHT);
     }
     if (moveDown) {
-      playerY = constrain(playerY-speed, BOTTOM, TOP);
+      playerY = constrain(playerY-moveSpeed, BOTTOM, TOP);
+    }
+    if(!moveLeft && !moveRight && !moveUp && !moveDown){
+      driftBack();
     }
   }
 
   void driftBack(){
-
+    //drift the player back to origin using the simplest lerp step
+    playerX = lerp(playerX, originX, driftSpeed);
+    playerY = lerp(playerY, originY, driftSpeed);
   }
 
   float getX(){

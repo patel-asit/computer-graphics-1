@@ -1,8 +1,9 @@
 class Bullet extends Particle {
     float speed;
-    float direction;
     float x, y;
-    Bullet(float originX, float originY, float direction) {
+    PVector direction;
+    float z = GROUND-0.005;
+    Bullet(float originX, float originY, PVector direction) {
         this.speed = 10;
         this.direction = direction;
         this.x = originX;
@@ -10,8 +11,9 @@ class Bullet extends Particle {
     }
 
     void move() {
-        // x += speed;
-        y += speed;
+        x += speed * direction.x;
+        y += speed * direction.y;
+        // direction.rotate(PI / 180); // Rotate by 1 degree each frame
     }
 
     void draw() {
@@ -27,14 +29,24 @@ class Bullet extends Particle {
         }
     }
 
+    int i = 0;
     void drawRectangle() {
         fill(color(0, 255, 0));
         stroke(color(0, 0, 0));
+        pushMatrix();
         beginShape(TRIANGLE);
-            vertex(x, y, GROUND);
-            vertex(x+40, y, GROUND);
-            vertex(x+40, y+40, GROUND);
+            //bring the axis from origin to current point
+            translate(x, y, z);
+            //perform rotation about the axis
+            rotate(radians(i++));
+            //reset the axis to draw
+            translate(-x, -y, -z);
+
+            vertex(x, y, z);
+            vertex(x-40, y-40, z);
+            vertex(x+40, y-40,z);
         endShape();
+        popMatrix();
   }
 
 }

@@ -6,6 +6,8 @@ float RIGHT = 1000;
 float BOTTOM = -1000;
 float TOP = 1000;
 
+World world = new World();
+
 void setup() {
   size(600, 600, P3D); // change the dimensions if desired
   textureMode(NORMAL); // use normalized 0..1 texture coords
@@ -16,5 +18,5 @@ void setup() {
 }
 
 void draw() {
-  drawWorld();
+  world.drawWorld();
 }

@@ -26,7 +26,7 @@ void keyPressed() {
         moveDown = true;
     }
     if(key == KEY_SHOOT){
-        addBullet();
+        world.addBullet();
     }
 }
 
