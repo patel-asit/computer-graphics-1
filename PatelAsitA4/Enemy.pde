@@ -1,7 +1,7 @@
-    float RECT_SIZE = 100;
 
 class Enemy extends Particle {
-    float speed = 300; //frames per second
+    float RECT_SIZE = 100;
+    float speed = 300; //pixels per second
     float FRAME_RATE = 60;
 
     float dist, numSteps, stepCount;
@@ -9,18 +9,22 @@ class Enemy extends Particle {
     float originX, originY;
     
     Enemy(float originX, float originY) {
-        currX = originX;
-        currY = originY;
         this.originX = originX;
         this.originY = originY;
+        currX = originX;
+        currY = originY;
+
+        radius = sqrt(sq(RECT_SIZE/2) + sq(RECT_SIZE/2));
         randomizeDest();
     }
 
+    void draw() {
+        drawRectangle();
+        move();
+        checkPrune();
+    }
+
     void move() {
-        //one time movement including lerps
-        //for 0th iteration
-        //numsteps will give the interpolation t=0 and t=1 i think
-        //then do t prime?
         float t;
         if(stepCount <= numSteps){
             t = 0.5 * (1 - cos(PI * (stepCount/numSteps)));
@@ -31,18 +35,12 @@ class Enemy extends Particle {
             shootBullet();
             randomizeDest();
         }
-    }
+        updateCenter();
 
-    void draw() {
-        drawRectangle();
-        move();
-        checkPrune();
     }
 
     void shootBullet(){
-        //add bullet to world
         world.addEnemyBullet(currX, currY);
-        // bullets.add(new Bullet(currX, currY, new PVector(0, 1)));
     }
     
     void randomizeDest(){
@@ -55,25 +53,28 @@ class Enemy extends Particle {
         stepCount = 0;
     }
 
-    void checkPrune(){
-        //include collisions here later
-        if(currX < LEFT || currX > RIGHT || currY < BOTTOM || currY > TOP){
-            prune = true;
-        }
+    void drawRectangle() {
+        fill(color(0, 0, 255));
+        stroke(color(0, 0, 0));
+        beginShape();
+            vertex(currX, currY, GROUND);
+            vertex(currX+RECT_SIZE, currY, GROUND);
+            vertex(currX+RECT_SIZE, currY+RECT_SIZE, GROUND);
+            vertex(currX, currY+RECT_SIZE, GROUND); 
+        endShape();
     }
 
-  void drawRectangle() {
-    fill(color(0, 0, 255));
-    stroke(color(0, 0, 0));
-    beginShape();
-      vertex(currX, currY, GROUND);
-      vertex(currX+RECT_SIZE, currY, GROUND);
-      vertex(currX+RECT_SIZE, currY+RECT_SIZE, GROUND);
-      vertex(currX, currY+RECT_SIZE, GROUND); 
-    endShape();
-  }
+    void updateCenter(){
+        center = new PVector(currX+RECT_SIZE/2, currY+RECT_SIZE/2);
+    }
 
-    void setBoundingBox(){
-        radius = RECT_SIZE/2;
+    void collided(Particle other){
+        if(isTouching(other)){
+            if(other instanceof Bullet){
+                prune = ((Bullet)other).playerBullet;
+            }else if(other instanceof Player){
+                prune = true;
+            }
+        }
     }
 }

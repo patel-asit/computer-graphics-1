@@ -9,23 +9,22 @@
 
 class Player extends Particle {
   float originX, originY;
-  float currX, currY;
   final float RECT_WIDTH = 200;
   final float RECT_HEIGHT = 200;
 
-  float moveSpeed = 10;
-  
   //0.005 is a magic number because the players drift moveSpeed felt right when running 
   float driftSpeed = 0.005;
+  float moveSpeed = 10;
 
   Player(float originX, float originY) {
-    super();
-    currX = originX;
-    currY = originY;
-
     //for drifting back to center
     this.originX = originX;
     this.originY = originY;
+
+    currX = originX;
+    currY = originY;
+
+    radius = sqrt(sq(RECT_WIDTH/2) + sq(RECT_HEIGHT/2));
   }
 
   void draw() {
@@ -60,6 +59,8 @@ class Player extends Particle {
     if(!moveLeft && !moveRight && !moveUp && !moveDown){
       driftBack();
     }
+
+    updateCenter();
   }
 
   void driftBack(){
@@ -68,14 +69,20 @@ class Player extends Particle {
     currY = lerp(currY, originY, driftSpeed);
   }
 
-  float getX(){
-    return currX+RECT_WIDTH/2;
-  } 
-  float getY(){
-    return currY+RECT_HEIGHT;
+  void collided(Particle other){
+    if(isTouching(other)){
+      if(other instanceof Bullet){
+          prune = !((Bullet)other).playerBullet;
+      }else if(other instanceof Enemy){
+          prune = true;
+      }
+    }
   }
 
-  void setBoundingBox(){
-    radius = RECT_WIDTH/2;
+  void updateCenter(){
+    center = new PVector(currX+RECT_WIDTH/2, currY+RECT_HEIGHT/2);
   }
+
+  float getX() { return currX + RECT_WIDTH / 2; }
+  float getY() { return currY + RECT_HEIGHT; }
 }

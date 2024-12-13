@@ -1,42 +1,36 @@
 class Bullet extends Particle {
-    float speed;
     PVector direction;
+    float speed;
+    float rotationAngle = 0;
+    
     float RECT_SIZE = 50;
     float z = GROUND-0.005;
-    float rotationAngle = 0;
-    boolean playerBullet = false;
 
+    boolean playerBullet = false;
+    
     Bullet(float originX, float originY, PVector direction, boolean playerBullet) {
         this.speed = 10;
         this.direction = direction;
         this.playerBullet = playerBullet;
         currX = originX;
         currY = originY;
-        setBoundingBox();
-    }
-
-    void move() {
-        currX += speed * direction.x;
-        currY += speed * direction.y;
-        // direction.rotate(PI / 180); // Rotate by 1 degree each frame
+        radius = sqrt(sq(RECT_SIZE/2) + sq(RECT_SIZE/2));
     }
 
     void draw() {
         drawRectangle();
         move();
-        checkPrune();
+        checkBounds();
     }
-
-    void checkPrune(){
-        //include collisions here later
-        if(currX < LEFT || currX > RIGHT || currY < BOTTOM || currY > TOP){
-            prune = true;
-        }
-    }
-
+    
     void drawRectangle() {
-        fill(color(0, 255, 0));
+        if(playerBullet){
+            fill(color(0, 255, 0));
+        }else{
+            fill(color(255, 0, 255));
+        }
         stroke(color(0, 0, 0));
+
         pushMatrix();
         beginShape();
             //bring the axis from origin to current point
@@ -54,24 +48,37 @@ class Bullet extends Particle {
         popMatrix();
     }
 
-    void collided(Particle other){
-        //check distance first though
-        float distance = dist(currX, currY, other.currX, other.currY);
+    void move() {
+        currX += speed * direction.x;
+        currY += speed * direction.y;
+        // direction.rotate(PI / 180); // Rotate by 1 degree each frame
+        updateCenter();
+    }
 
-        //apply if the bounds are touching
-        if(other instanceof Bullet){
-            prune = (playerBullet ^ ((Bullet)other).playerBullet);
-        }else{
-            //meaning its enemy or player
-            if(playerBullet){
-                prune = other instanceof Enemy;
+    void checkBounds(){
+        //include collisions here later
+        if(currX < LEFT || currX > RIGHT || currY < BOTTOM || currY > TOP){
+            prune = true;
+        }
+    }
+
+    void collided(Particle other){
+        if(isTouching(other)){
+            //apply if the bounds are touching
+            if(other instanceof Bullet){
+                prune = (playerBullet ^ ((Bullet)other).playerBullet);
             }else{
-                prune = other instanceof Player;
+                //meaning its enemy or player
+                if(playerBullet){
+                    prune = other instanceof Enemy;
+                }else{
+                    prune = other instanceof Player;
+                }
             }
         }
     }
 
-    void setBoundingBox(){
-        ;
+    void updateCenter(){
+        center = new PVector(currX+RECT_SIZE/2, currY+RECT_SIZE/2);
     }
 }
