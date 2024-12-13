@@ -4,23 +4,65 @@ class World{
     float PLAYER_ORIGIN_Y = BOTTOM;
 
     Player player;
-    ArrayList<Particle> bullets;
+    ArrayList<Bullet> bullets;
     ArrayList<Particle> toRemove;
     ArrayList<Enemy> enemies;
+    ArrayList<Particle> particles;
 
     World(){
-        //add enemies every 2 seconds
         player = new Player(PLAYER_ORIGIN_X, PLAYER_ORIGIN_Y);
-        bullets = new ArrayList<Particle>();
+        bullets = new ArrayList<Bullet>();
         enemies = new ArrayList<Enemy>();
         toRemove = new ArrayList<Particle>();
+        particles = new ArrayList<Particle>();
+        particles.add(player);
         addEnemy();
+        // addEnemy();
+        // addEnemy();
+        // addEnemy();
     }
 
     void drawWorld(){
         drawBackground();
-        player.draw();
-        
+        particles.addAll(bullets);
+        particles.addAll(enemies);
+        // player.draw();
+        // drawBullets();
+        // drawEnemies();
+
+        //draw particles
+        for(Particle particle : particles){
+            if(particle.prune){
+                toRemove.add(particle);
+                continue;
+            }
+            particle.draw();
+        }
+
+
+        // //merge bullets and enemies list into particles list
+        // particles.addAll(bullets);
+        // particles.addAll(enemies);
+
+        // // //check collisions between every particle
+        // // for(Particle particle : particles){
+        // //     print(particle);
+        // //     for(Particle other : particles){
+        // //         if(particle != other){
+        // //             particle.collided(other);
+        // //         }
+        // //     }
+        // // }
+
+        // //check collisions between every particle and bullet
+        // for(Particle particle : particles){
+        //     for(Particle bullet : bullets){
+        //         bullet.collided(particle); //<>//
+        //     }
+        // }
+    }
+
+    void drawBullets(){
         for(Particle bullet : bullets){
             if(bullet.prune){
                 toRemove.add(bullet);
@@ -29,10 +71,19 @@ class World{
             bullet.draw();
         }
         bullets.removeAll(toRemove);
+        toRemove.clear();
+    }
 
+    void drawEnemies(){
         for(Enemy enemy : enemies){
+            if(enemy.prune){
+                toRemove.add(enemy);
+                continue;
+            }
             enemy.draw();
         }
+        enemies.removeAll(toRemove);
+        toRemove.clear();
     }
 
     void drawBackground(){
@@ -59,7 +110,8 @@ class World{
 
     //adds the bullet in world
     void addBullet(float x, float y, PVector direction, boolean playerBullet){
-        bullets.add(new Bullet(x, y, direction, false));
+        bullets.add(new Bullet(x, y, direction, playerBullet));
+        // particles.add(new Bullet(x, y, direction, playerBullet));
     }
     
     //randomly adds enemy on top half of screen
@@ -67,5 +119,6 @@ class World{
         float randomX = random(LEFT, RIGHT);
         float randomY = random(0, TOP);
         enemies.add(new Enemy(randomX, randomY));
+        // particles.add(new Enemy(randomX, randomY));
     }
 }
