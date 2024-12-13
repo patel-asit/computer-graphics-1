@@ -3,6 +3,8 @@ class World{
     float PLAYER_ORIGIN_X = (LEFT+RIGHT)/2;
     float PLAYER_ORIGIN_Y = BOTTOM;
 
+    boolean playerDead = false;
+
     Player player;
     ArrayList<Bullet> bullets;
     ArrayList<Particle> toRemove;
@@ -24,42 +26,40 @@ class World{
 
     void drawWorld(){
         drawBackground();
-        particles.addAll(bullets);
-        particles.addAll(enemies);
-        // player.draw();
-        // drawBullets();
-        // drawEnemies();
 
-        //draw particles
-        for(Particle particle : particles){
-            if(particle.prune){
-                toRemove.add(particle);
-                continue;
+        if(!player.prune){
+            
+            particles.clear();
+            particles.add(player);
+            particles.addAll(bullets);
+            particles.addAll(enemies);
+            // player.draw();
+            // drawBullets();
+            // drawEnemies();
+
+            //draw particles
+            for(Particle particle : particles){
+                if(particle.prune){
+                    toRemove.add(particle);
+                    continue;
+                }
+                particle.draw();
             }
-            particle.draw();
+
+            // //remove all the pruned particles
+            enemies.removeAll(toRemove);
+            bullets.removeAll(toRemove);
+
+
+            //check collisions between every particle
+            for(Particle particle : particles){
+                for(Particle other : particles){
+                    if(particle != other){
+                        particle.collided(other);
+                    }
+                }
+            }
         }
-
-
-        // //merge bullets and enemies list into particles list
-        // particles.addAll(bullets);
-        // particles.addAll(enemies);
-
-        // // //check collisions between every particle
-        // // for(Particle particle : particles){
-        // //     print(particle);
-        // //     for(Particle other : particles){
-        // //         if(particle != other){
-        // //             particle.collided(other);
-        // //         }
-        // //     }
-        // // }
-
-        // //check collisions between every particle and bullet
-        // for(Particle particle : particles){
-        //     for(Particle bullet : bullets){
-        //         bullet.collided(particle); //<>//
-        //     }
-        // }
     }
 
     void drawBullets(){

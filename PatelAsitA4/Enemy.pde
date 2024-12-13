@@ -39,7 +39,7 @@ class Enemy extends Particle {
     }
 
     void shootBullet(){
-        // world.addEnemyBullet(currX, currY);
+        world.addEnemyBullet(currX, currY);
     }
     
     void randomizeDest(){
