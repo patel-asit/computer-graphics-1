@@ -10,7 +10,7 @@
 class Player extends Particle {
   float originX, originY;
   final float RECT_WIDTH = 200;
-  final float RECT_HEIGHT = 200;
+  final float RECT_HEIGHT = 250;
 
   //0.005 is a magic number because the players drift moveSpeed felt right when running 
   float driftSpeed = 0.005;

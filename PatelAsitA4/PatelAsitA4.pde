@@ -9,6 +9,7 @@ float TOP = 1000;
 PImage enemyTexture;
 PImage playerTexture;
 PImage backgroundTexture;
+PImage playerBulletTexture;
 World world = new World();
 
 void setup() {
@@ -20,6 +21,7 @@ void setup() {
   enemyTexture = loadImage("enemy.png");
   playerTexture = loadImage("player.png");
   backgroundTexture = loadImage("background.jpg");
+  playerBulletTexture = loadImage("playerbullet2.png");
 }
 
 void draw() {

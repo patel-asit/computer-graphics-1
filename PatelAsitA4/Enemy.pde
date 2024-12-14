@@ -1,13 +1,17 @@
 class Enemy extends Particle {
-    float RECT_SIZE = 200;
+    float RECT_SIZE = 250;
     float speed = 300; //pixels per second
     float FRAME_RATE = 60;
 
     float dist, numSteps, stepCount;
     float destX, destY;
     float originX, originY;
-    float Z = GROUND+0.05;
+    float Z;
+
     Enemy(float originX, float originY) {
+        // for avoiding enemy overlapping
+        Z = GROUND + random(0.05, 0.10);
+
         this.originX = originX;
         this.originY = originY;
         currX = originX;
@@ -16,7 +20,7 @@ class Enemy extends Particle {
         if(hardMode){
             speed = 500;
         }
-
+        
         radius = sqrt(sq(RECT_SIZE/2) + sq(RECT_SIZE/2));
         randomizeDest();
     }
