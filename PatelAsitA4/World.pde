@@ -27,7 +27,9 @@ class World{
         drawBackground();
         if(!player.prune){
             drawParticles();
-            checkCollisions();
+
+            if(doCollision)
+                checkCollisions();
         }
     }
 
@@ -70,10 +72,13 @@ class World{
         background(100);
         fill(200);
         beginShape();
-            vertex(LEFT, BOTTOM, GROUND-0.01);
-            vertex(RIGHT, BOTTOM, GROUND-0.01);
-            vertex(RIGHT, TOP, GROUND-0.01);
-            vertex(LEFT, TOP, GROUND-0.01);
+            if(doTextures){
+                texture(backgroundTexture);
+            }
+            vertex(LEFT, BOTTOM, GROUND-0.01, 0, 1);
+            vertex(RIGHT, BOTTOM, GROUND-0.01, 1, 1);
+            vertex(RIGHT, TOP, GROUND-0.01, 1, 0);
+            vertex(LEFT, TOP, GROUND-0.01, 0, 0);
         endShape(CLOSE);
     }
 

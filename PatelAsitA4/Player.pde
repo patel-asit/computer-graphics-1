@@ -34,12 +34,15 @@ class Player extends Particle {
 
   void drawRectangle() {
     fill(color(255, 0, 0));
-    stroke(color(0, 0, 0));
+    noStroke();
     beginShape();
-      vertex(currX, currY, GROUND);
-      vertex(currX+RECT_WIDTH, currY, GROUND);
-      vertex(currX+RECT_WIDTH, currY+RECT_HEIGHT, GROUND);
-      vertex(currX, currY+RECT_HEIGHT, GROUND); 
+      if(doTextures){
+        texture(playerTexture);
+      }
+      vertex(currX, currY, GROUND, 0,1);
+      vertex(currX+RECT_WIDTH, currY, GROUND, 1,1);
+      vertex(currX+RECT_WIDTH, currY+RECT_HEIGHT, GROUND, 1,0);
+      vertex(currX, currY+RECT_HEIGHT, GROUND, 0,0); 
     endShape();
   }
 

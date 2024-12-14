@@ -28,6 +28,12 @@ void keyPressed() {
     if(key == KEY_SHOOT){
         world.addPlayerBullet();
     }
+    if(key == KEY_TEXTURE){
+        doTextures = !doTextures;
+    }
+    if(key == KEY_COLLISION){
+        doCollision = !doCollision;
+    }
 }
 
 void keyReleased() {

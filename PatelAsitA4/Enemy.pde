@@ -1,13 +1,12 @@
-
 class Enemy extends Particle {
-    float RECT_SIZE = 100;
+    float RECT_SIZE = 200;
     float speed = 300; //pixels per second
     float FRAME_RATE = 60;
 
     float dist, numSteps, stepCount;
     float destX, destY;
     float originX, originY;
-    
+    float Z = GROUND+0.05;
     Enemy(float originX, float originY) {
         this.originX = originX;
         this.originY = originY;
@@ -39,7 +38,6 @@ class Enemy extends Particle {
             randomizeDest();
         }
         updateCenter();
-
     }
 
     void shootBullet(){
@@ -58,12 +56,15 @@ class Enemy extends Particle {
 
     void drawRectangle() {
         fill(color(0, 0, 255));
-        stroke(color(0, 0, 0));
+        noStroke();
         beginShape();
-            vertex(currX, currY, GROUND);
-            vertex(currX+RECT_SIZE, currY, GROUND);
-            vertex(currX+RECT_SIZE, currY+RECT_SIZE, GROUND);
-            vertex(currX, currY+RECT_SIZE, GROUND); 
+            if(doTextures){
+                texture(enemyTexture);
+            }
+            vertex(currX, currY, Z,0,1);
+            vertex(currX+RECT_SIZE, currY, Z, 1,1);
+            vertex(currX+RECT_SIZE, currY+RECT_SIZE, Z, 1,0);
+            vertex(currX, currY+RECT_SIZE, Z, 0,0); 
         endShape();
     }
 
